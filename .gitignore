@@ -1,0 +1,24 @@
+# Archivos de compilación y Gradle
+.gradle/
+build/
+bin/
+out/
+
+# Entorno de pruebas de Minecraft que genera Forge
+run/
+logs/
+saves/
+
+# Configuraciones de IDEs (IntelliJ, Eclipse, VS Code)
+.idea/
+*.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+.vscode/
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db

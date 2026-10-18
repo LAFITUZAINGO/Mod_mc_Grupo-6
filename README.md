@@ -5,9 +5,10 @@
 
 
 ### El proyecto contempla:
-- Aparición del jugador en una dimensión desconocida con un libro guía.
-- Exploración de una dungeon subterránea.
+- Aparición de estructuras que funcionan como portal.
+- Portal funcional después de tirar una moneda dentro del mismo.
 - Crafteo de la Llave Moneda para acceder a la dungeon.
+- Exploración de una dungeon subterránea dentro de esta misma dimensión.
 - Recolección de dos Tarjetas Amarillas para fabricar la Tarjeta Roja.
 - Desbloqueo de la sala del jefe final mediante la Tarjeta Roja.
 - Combate contra Mr. Mullet, con ataques y habilidades especiales.

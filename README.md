@@ -50,7 +50,7 @@
    cd Mod_mc_Grupo-6
 
 
-   ### El proyecto contempla:
+### El proyecto contempla:
 
 Aparición de estructuras que funcionan como portal.
 Portal funcional después de tirar una moneda dentro del mismo.

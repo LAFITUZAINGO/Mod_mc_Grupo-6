@@ -1,5 +1,6 @@
 # Mod_mc_Grupo-6
 **Autores: Manuel Pintaluba, Leandro Alonso, Sofía Cedrés, Rodrigo Alonso y Fabián Guillermo**
+
 **Plataforma: Minecraft Forge (1.20.1)**
 
 #### Descripción General

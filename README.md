@@ -11,18 +11,6 @@
 
 Durante la aventura, el jugador deberá explorar una estructura subterránea, conseguir objetos especiales y resolver pequeñas mecánicas de crafteo para avanzar. El objetivo final es enfrentarse a Mr. Mullet, derrotarlo y liberarlo de la corrupción que lo mantiene atrapado.
 
-#### Características Principales
-
-- **Portal Misterioso:** Aparición natural de estructuras de portal en el mundo.
-- **Sistema de Activación:** El portal se vuelve funcional tras arrojar una moneda específica en su interior.
-- **Crafteo de la Llave Moneda:** Receta personalizada para obtener el objeto necesario para acceder a la dimensión de la dungeon.
-- **Dimensión y Calabozo Subterráneo:** Exploración completa de una dungeon peligrosa repleta de desafíos.
-- **Progresión por Tarjetas:** 
- * Recolección de **dos Tarjetas Amarillas** ocultas en la dungeon.
- * Combinación de las tarjetas para fabricar la **Tarjeta Roja**.
-  * Uso de la Tarjeta Roja para desbloquear el acceso directo a la sala del jefe final.
-- **Combate de Jefe - *Mr. Mullet*:** Enfrentamiento épico contra un jefe equipado con ataques y habilidades especiales personalizadas.
-- **Recompensas y Victoria:** Obtención de recompensas exclusivas tras la victoria y activación de un portal de salida para regresar al mundo principal.
 
 #### Alcance:
 

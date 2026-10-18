@@ -3,6 +3,8 @@
 
 **Plataforma: Minecraft Forge (1.20.1)**
 
+--
+
 #### Descripción General
 
 **Mod_mc_Grupo-6** es un mod de Minecraft centrado en la exploración, la aventura y una historia narrativa. El jugador deberá viajar a una dimensión extraña para encontrar y rescatar al profesor Mr. Mullet, quien quedó atrapado y corrompido por un extraño malware que se fusionó con el mundo.

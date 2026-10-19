@@ -116,10 +116,12 @@ CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
 
 # If JAVA_HOME does not exist, try common locations or unset it to use PATH
 if [ -n "$JAVA_HOME" ] && [ ! -d "$JAVA_HOME" ]; then
-    if [ -d "/usr/lib/jvm/jdk-25.0.4.1+1" ]; then
-        JAVA_HOME="/usr/lib/jvm/jdk-25.0.4.1+1"
+    if [ -d "/usr/lib/jvm/java-21-openjdk-amd64" ]; then
+        JAVA_HOME="/usr/lib/jvm/java-21-openjdk-amd64"
     elif [ -d "/usr/lib/jvm/default-java" ]; then
         JAVA_HOME="/usr/lib/jvm/default-java"
+    elif [ -d "/usr/lib/jvm/jdk-25.0.4.1+1" ]; then
+        JAVA_HOME="/usr/lib/jvm/jdk-25.0.4.1+1"
     elif command -v java >/dev/null 2>&1; then
         unset JAVA_HOME
     fi

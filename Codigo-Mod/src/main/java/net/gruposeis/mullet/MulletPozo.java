@@ -1,6 +1,9 @@
 package net.gruposeis.mullet;
 
 import com.mojang.logging.LogUtils;
+import net.gruposeis.mullet.block.ModBlocks;
+import net.gruposeis.mullet.item.ModItems;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -23,11 +26,15 @@ public class MulletPozo {
     public MulletPozo(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
 
-        // Registra los métodos de inicialización
+        // 1. Registra los ítems y bloques en el bus de eventos de Forge
+        ModItems.register(modEventBus);
+        ModBlocks.register(modEventBus);
+
+        // 2. Registra los métodos de inicialización
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::addCreative);
 
-        // Registra el mod en el bus de eventos de MinecraftForge
+        // 3. Registra el mod en el bus general de eventos de MinecraftForge
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -35,8 +42,19 @@ public class MulletPozo {
         LOGGER.info("Configuracion comun de Mullet Pozo cargada");
     }
 
+    // Método que coloca los ítems y bloques en las pestañas del inventario creativo
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        // En los proximos videos aqui agregaras items a las pestañas del modo creativo
+        // Agrega los ítems a la pestaña de Ingredientes
+        if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
+            event.accept(ModItems.MONEDA);
+            event.accept(ModItems.TARJETA_ROJA);
+            event.accept(ModItems.TARJETA_AMARILLA);
+        }
+
+        // Agrega el bloque a la pestaña de Bloques de Construcción
+        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
+            event.accept(ModBlocks.MULLET_BLOCK);
+        }
     }
 
     @SubscribeEvent

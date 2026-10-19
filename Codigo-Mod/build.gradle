@@ -84,6 +84,8 @@ minecraft {
         client {
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', mod_id
+            // Desactiva la ventana temprana de carga que causa crash en Wayland/Linux
+            property 'fml.earlyprogresswindow', 'false'
         }
 
         server {

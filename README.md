@@ -12,6 +12,11 @@
 Durante la aventura, el jugador deberá explorar una estructura subterránea, conseguir objetos especiales y resolver pequeñas mecánicas de crafteo para avanzar. El objetivo final es enfrentarse a Mr. Mullet, derrotarlo y liberarlo de la corrupción que lo mantiene atrapado.
 
 
+## Documentación
+
+- [Mecánicas y progresión del mod](Docs/Mecanicas.md)
+
+
 #### Alcance:
 
 - Aparición de estructuras que funcionan como portal.

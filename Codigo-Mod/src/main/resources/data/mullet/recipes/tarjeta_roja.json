@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "mullet:tarjeta_amarilla"
+    },
+    {
+      "item": "mullet:tarjeta_amarilla"
+    }
+  ],
+  "result": {
+    "item": "mullet:tarjeta_roja",
+    "count": 1
+  }
+}

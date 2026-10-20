@@ -11,9 +11,10 @@
 
 Durante la aventura, el jugador deberá explorar una estructura subterránea, conseguir objetos especiales y resolver pequeñas mecánicas de crafteo para avanzar. El objetivo final es enfrentarse a Mr. Mullet, derrotarlo y liberarlo de la corrupción que lo mantiene atrapado.
 
-
+---
 
 **La energía del Nether**
+
 El Pozo fue sellado mediante una energía desconocida para impedir que cualquiera pudiera ingresar a las Tierras Profundas.
 
 Sin embargo, existe un objeto capaz de romper ese sello: la Estrella del Nether.
@@ -22,7 +23,7 @@ Su enorme concentración de energía permite crear una llave capaz de alterar la
 
 Al arrojarla al Pozo, la energía de la estrella reacciona con el sello y permite abrir el acceso a las Tierras Profundas.
 
-
+---
 
 ## Documentación
 

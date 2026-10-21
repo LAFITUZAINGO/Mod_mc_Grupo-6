@@ -29,7 +29,7 @@ La **Llave Moneda** es un objeto necesario para desbloquear el acceso a la dimen
 
 **Receta de crafteo:**
 
-- 1 Estrella del Nether.
+- 1 Esmeralda.
 - 4 Lingotes de Oro.
 
 La Estrella del Nether debe colocarse en el centro de la mesa de crafteo, mientras que los cuatro lingotes de oro deben ubicarse a su alrededor, formando una cruz.
@@ -39,7 +39,7 @@ La Estrella del Nether debe colocarse en el centro de la mesa de crafteo, mientr
 | | | |
 |:---:|:---:|:---:|
 | | Oro | |
-| Oro | Estrella del Nether | Oro |
+| Oro | Esmeralda | Oro |
 | | Oro | |
 
 ### Estructura del Pozo

@@ -68,38 +68,7 @@ El objetivo de esta ambientación es transmitir una sensación de aislamiento, m
 
 ### Distribución del Calabozo
 
-El calabozo estará dividido en **cuatro salas principales**.
-
-#### 4.1. Zona Segura Inicial
-
-Será la primera sala que encontrará el jugador al ingresar a la dimensión.
-
-Funciones principales:
-
-- Servir como punto inicial de exploración.
-- Proporcionar una zona segura.
-- Permitir el crafteo de la Tarjeta Roja.
-- Funcionar como punto de regreso antes del enfrentamiento final.
-
-#### 4.2. Primera Sala de Enemigos
-
-El jugador deberá enfrentarse a diferentes enemigos y superar los desafíos de la primera sala.
-
-Al completarla, obtendrá una **Tarjeta Amarilla**, necesaria para avanzar hacia el jefe final.
-
-#### 4.3. Segunda Sala de Enemigos
-
-La segunda sala presentará nuevos enfrentamientos y desafíos.
-
-Al completar sus objetivos, el jugador conseguirá la segunda **Tarjeta Amarilla**.
-
-#### 4.4. Sala del Jefe Final
-
-Esta sala permanecerá bloqueada hasta que el jugador consiga fabricar la **Tarjeta Roja**.
-
-Para acceder, deberá regresar a la zona segura inicial, combinar las dos Tarjetas Amarillas y utilizar la nueva tarjeta para desbloquear la puerta.
-
-En su interior se encontrará **MR_MULLET**, el jefe final del mod.
+  **En proceso**
 
 ## 5. Sistema de Tarjetas
 

@@ -1,0 +1,7 @@
+{
+  "type": "mullet:pozo",
+  "biomes": "#mullet:has_structure/pozo",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none"
+}

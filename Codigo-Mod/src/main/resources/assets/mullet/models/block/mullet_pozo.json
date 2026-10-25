@@ -1,6 +1,3 @@
 {
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "mullet:block/mullet_pozo"
-  }
+  "parent": "mullet:block/bloque_p"
 }

@@ -2,5 +2,7 @@
   "item.mullet.moneda": "Coin",
   "item.mullet.tarjeta_roja": "Red Card",
   "item.mullet.tarjeta_amarilla": "Yellow Card",
-  "block.mullet.mullet_block": "Mullet Well"
+  "item.mullet.mr_mullet_spawn_egg": "Mr. Mullet Spawn Egg",
+  "block.mullet.mullet_block": "Mullet Well",
+  "entity.mullet.mr_mullet": "Mr. Mullet"
 }

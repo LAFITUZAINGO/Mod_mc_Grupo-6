@@ -1,7 +1,9 @@
 package net.gruposeis.mullet.item;
 
 import net.gruposeis.mullet.MulletPozo;
+import net.gruposeis.mullet.entity.ModEntities;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -21,6 +23,9 @@ public class ModItems {
 
     public static final RegistryObject<Item> TARJETA_AMARILLA = ITEMS.register("tarjeta_amarilla",
             () -> new Item(new Item.Properties()));
+
+    public static final RegistryObject<Item> MR_MULLET_SPAWN_EGG = ITEMS.register("mr_mullet_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.MR_MULLET, 0x351E0B, 0x619F00, new Item.Properties()));
 
     // Método para conectar el registro con el bus de eventos de Forge
     public static void register(IEventBus eventBus) {

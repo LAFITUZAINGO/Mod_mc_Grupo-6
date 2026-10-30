@@ -1,4 +1,4 @@
-1# Mecánicas y Progresión del Mod
+# Mecánicas y Progresión del Mod
 
 ## 1. Introducción
 

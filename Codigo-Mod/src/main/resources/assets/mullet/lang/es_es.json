@@ -4,5 +4,13 @@
   "item.mullet.tarjeta_amarilla": "Tarjeta Amarilla",
   "item.mullet.mr_mullet_spawn_egg": "Huevo generador de Mr. Mullet",
   "block.mullet.mullet_block": "Pozo Mullet",
-  "entity.mullet.mr_mullet": "Mr. Mullet"
+  "entity.mullet.mr_mullet": "Mr. Mullet",
+  "subtitles.mullet.tarjeta_poner": "Tarjeta insertada",
+  "subtitles.mullet.dimension_entrar": "Entrando a las Tierras Profundas",
+  "subtitles.mullet.dimension_salir": "Regresando al Overworld",
+  "subtitles.mullet.jefe_golpe": "Mr. Mullet herido",
+  "subtitles.mullet.jefe_muerte": "Mr. Mullet derrotado",
+  "subtitles.mullet.jefe_ataque": "Mr. Mullet ataca",
+  "subtitles.mullet.dungeon_ambiente": "Música de la mazmorra",
+  "subtitles.mullet.dungeon_combate": "Combate de mazmorra"
 }

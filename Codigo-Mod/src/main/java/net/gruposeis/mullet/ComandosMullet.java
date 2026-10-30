@@ -91,6 +91,74 @@ public class ComandosMullet {
                                     return Command.SINGLE_SUCCESS;
                                 })
                         )
+
+                        // Comando para reproducir y probar cada sonido del mod
+                        .then(Commands.literal("sonido")
+                                .then(Commands.literal("tarjeta")
+                                        .executes(context -> {
+                                            ServerPlayer jugador = context.getSource().getPlayerOrException();
+                                            jugador.level().playSound(null, jugador.blockPosition(), net.gruposeis.mullet.sound.ModSounds.TARJETA_PONER.get(), net.minecraft.sounds.SoundSource.PLAYERS, 1.0F, 1.0F);
+                                            context.getSource().sendSuccess(() -> Component.literal("§e[Sonido] Reproduciendo: tarjeta_poner"), false);
+                                            return Command.SINGLE_SUCCESS;
+                                        })
+                                )
+                                .then(Commands.literal("entrar")
+                                        .executes(context -> {
+                                            ServerPlayer jugador = context.getSource().getPlayerOrException();
+                                            jugador.level().playSound(null, jugador.blockPosition(), net.gruposeis.mullet.sound.ModSounds.DIMENSION_ENTRAR.get(), net.minecraft.sounds.SoundSource.PLAYERS, 1.0F, 1.0F);
+                                            context.getSource().sendSuccess(() -> Component.literal("§5[Sonido] Reproduciendo: dimension_entrar"), false);
+                                            return Command.SINGLE_SUCCESS;
+                                        })
+                                )
+                                .then(Commands.literal("salir")
+                                        .executes(context -> {
+                                            ServerPlayer jugador = context.getSource().getPlayerOrException();
+                                            jugador.level().playSound(null, jugador.blockPosition(), net.gruposeis.mullet.sound.ModSounds.DIMENSION_SALIR.get(), net.minecraft.sounds.SoundSource.PLAYERS, 1.0F, 1.0F);
+                                            context.getSource().sendSuccess(() -> Component.literal("§a[Sonido] Reproduciendo: dimension_salir"), false);
+                                            return Command.SINGLE_SUCCESS;
+                                        })
+                                )
+                                .then(Commands.literal("golpe")
+                                        .executes(context -> {
+                                            ServerPlayer jugador = context.getSource().getPlayerOrException();
+                                            jugador.level().playSound(null, jugador.blockPosition(), net.gruposeis.mullet.sound.ModSounds.JEFE_GOLPE.get(), net.minecraft.sounds.SoundSource.HOSTILE, 1.0F, 1.0F);
+                                            context.getSource().sendSuccess(() -> Component.literal("§c[Sonido] Reproduciendo: jefe_golpe"), false);
+                                            return Command.SINGLE_SUCCESS;
+                                        })
+                                )
+                                .then(Commands.literal("muerte")
+                                        .executes(context -> {
+                                            ServerPlayer jugador = context.getSource().getPlayerOrException();
+                                            jugador.level().playSound(null, jugador.blockPosition(), net.gruposeis.mullet.sound.ModSounds.JEFE_MUERTE.get(), net.minecraft.sounds.SoundSource.HOSTILE, 1.0F, 1.0F);
+                                            context.getSource().sendSuccess(() -> Component.literal("§4[Sonido] Reproduciendo: jefe_muerte"), false);
+                                            return Command.SINGLE_SUCCESS;
+                                        })
+                                )
+                                .then(Commands.literal("ataque")
+                                        .executes(context -> {
+                                            ServerPlayer jugador = context.getSource().getPlayerOrException();
+                                            jugador.level().playSound(null, jugador.blockPosition(), net.gruposeis.mullet.sound.ModSounds.JEFE_ATAQUE.get(), net.minecraft.sounds.SoundSource.HOSTILE, 1.0F, 1.0F);
+                                            context.getSource().sendSuccess(() -> Component.literal("§6[Sonido] Reproduciendo: jefe_ataque"), false);
+                                            return Command.SINGLE_SUCCESS;
+                                        })
+                                )
+                                .then(Commands.literal("ambiente")
+                                        .executes(context -> {
+                                            ServerPlayer jugador = context.getSource().getPlayerOrException();
+                                            jugador.level().playSound(null, jugador.blockPosition(), net.gruposeis.mullet.sound.ModSounds.DUNGEON_AMBIENTE.get(), net.minecraft.sounds.SoundSource.RECORDS, 1.0F, 1.0F);
+                                            context.getSource().sendSuccess(() -> Component.literal("§9[Música] Reproduciendo: dungeon_ambiente"), false);
+                                            return Command.SINGLE_SUCCESS;
+                                        })
+                                )
+                                .then(Commands.literal("combate")
+                                        .executes(context -> {
+                                            ServerPlayer jugador = context.getSource().getPlayerOrException();
+                                            jugador.level().playSound(null, jugador.blockPosition(), net.gruposeis.mullet.sound.ModSounds.DUNGEON_COMBATE.get(), net.minecraft.sounds.SoundSource.RECORDS, 1.0F, 1.0F);
+                                            context.getSource().sendSuccess(() -> Component.literal("§d[Música] Reproduciendo: dungeon_combate"), false);
+                                            return Command.SINGLE_SUCCESS;
+                                        })
+                                )
+                        )
         );
     }
 

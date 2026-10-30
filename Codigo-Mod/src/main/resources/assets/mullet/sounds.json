@@ -1,0 +1,56 @@
+{
+  "tarjeta_poner": {
+    "subtitle": "subtitles.mullet.tarjeta_poner",
+    "sounds": [
+      "mullet:interacciones_objetos/tarjeta_poner_alt/tarjeta_poner_alt"
+    ]
+  },
+  "dimension_entrar": {
+    "subtitle": "subtitles.mullet.dimension_entrar",
+    "sounds": [
+      "mullet:ingreso_salida/dimension_entrar/dimension_entrar"
+    ]
+  },
+  "dimension_salir": {
+    "subtitle": "subtitles.mullet.dimension_salir",
+    "sounds": [
+      "mullet:ingreso_salida/dimension_salir/dimension_salir"
+    ]
+  },
+  "jefe_golpe": {
+    "subtitle": "subtitles.mullet.jefe_golpe",
+    "sounds": [
+      "mullet:acciones_jefe/jefe_golpe/jefe_golpe"
+    ]
+  },
+  "jefe_muerte": {
+    "subtitle": "subtitles.mullet.jefe_muerte",
+    "sounds": [
+      "mullet:acciones_jefe/jefe_muerte/jefe_muerte"
+    ]
+  },
+  "jefe_ataque": {
+    "subtitle": "subtitles.mullet.jefe_ataque",
+    "sounds": [
+      "mullet:acciones_jefe/jefe_ataque/jefe_ataque"
+    ]
+  },
+  "dungeon_ambiente": {
+    "subtitle": "subtitles.mullet.dungeon_ambiente",
+    "sounds": [
+      {
+        "name": "mullet:musica_dungeon/dungeon_ambiente/dungeon_ambiente",
+        "stream": true
+      }
+    ]
+  },
+  "dungeon_combate": {
+    "subtitle": "subtitles.mullet.dungeon_combate",
+    "sounds": [
+      {
+        "name": "mullet:musica_dungeon/dungeon_combate/dungeon_combate",
+        "stream": true
+      }
+    ]
+  }
+}

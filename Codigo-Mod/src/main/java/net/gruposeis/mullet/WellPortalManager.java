@@ -2,6 +2,7 @@ package net.gruposeis.mullet;
 
 import com.mojang.logging.LogUtils;
 import net.gruposeis.mullet.block.ModBlocks;
+import net.gruposeis.mullet.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -286,7 +287,8 @@ public class WellPortalManager {
         player.teleportTo(dungeonWorld, spawnX, spawnY, spawnZ, yaw, pitch);
 
         // 5. Efectos sonoros y mensajes
-        dungeonWorld.playSound(null, spawnPos, SoundEvents.PORTAL_TRAVEL, SoundSource.PLAYERS, 0.8f, 1.0f);
+        dungeonWorld.playSound(null, spawnPos, ModSounds.DIMENSION_ENTRAR.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+        dungeonWorld.playSound(null, spawnPos, SoundEvents.PORTAL_TRAVEL, SoundSource.PLAYERS, 0.4f, 1.0f);
         dungeonWorld.sendParticles(ParticleTypes.PORTAL, spawnX, spawnY + 0.5, spawnZ, 60, 0.6, 0.6, 0.6, 0.1);
 
         player.sendSystemMessage(Component.literal("§5§l[Tierras Profundas]§r §dHas ingresado a la mazmorra."));
@@ -316,7 +318,7 @@ public class WellPortalManager {
                 player.teleportTo(overworld, spawn.getX() + 0.5, surfaceY, spawn.getZ() + 0.5, player.getYRot(), player.getXRot());
             }
 
-            overworld.playSound(null, player.blockPosition(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0f, 1.0f);
+            overworld.playSound(null, player.blockPosition(), ModSounds.DIMENSION_SALIR.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
             overworld.sendParticles(ParticleTypes.PORTAL, player.getX(), player.getY() + 1.0, player.getZ(), 50, 0.5, 0.5, 0.5, 0.2);
             player.sendSystemMessage(Component.literal("§a§l[Pozo Mullet]§r §a¡Has regresado sano y salvo al Overworld!"));
         } else {

@@ -36,6 +36,7 @@ public class MulletPozo {
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModEntities.register(modEventBus);
+        net.gruposeis.mullet.sound.ModSounds.register(modEventBus);
         net.gruposeis.mullet.world.ModStructures.register(modEventBus);
 
         // 2. Registra los métodos de inicialización

@@ -4,5 +4,13 @@
   "item.mullet.tarjeta_amarilla": "Yellow Card",
   "item.mullet.mr_mullet_spawn_egg": "Mr. Mullet Spawn Egg",
   "block.mullet.mullet_block": "Mullet Well",
-  "entity.mullet.mr_mullet": "Mr. Mullet"
+  "entity.mullet.mr_mullet": "Mr. Mullet",
+  "subtitles.mullet.tarjeta_poner": "Card inserted",
+  "subtitles.mullet.dimension_entrar": "Entering the Deep Lands",
+  "subtitles.mullet.dimension_salir": "Returning to Overworld",
+  "subtitles.mullet.jefe_golpe": "Mr. Mullet hurt",
+  "subtitles.mullet.jefe_muerte": "Mr. Mullet defeated",
+  "subtitles.mullet.jefe_ataque": "Mr. Mullet attacks",
+  "subtitles.mullet.dungeon_ambiente": "Dungeon ambience music",
+  "subtitles.mullet.dungeon_combate": "Dungeon combat music"
 }

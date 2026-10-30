@@ -54,4 +54,15 @@ public class WellPortalEvents {
             }
         }
     }
+
+    @SubscribeEvent
+    public static void onPlayerRightClickBlockWithCard(net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock event) {
+        net.minecraft.world.item.ItemStack stack = event.getItemStack();
+        if (stack.is(ModItems.TARJETA_ROJA.get()) || stack.is(ModItems.TARJETA_AMARILLA.get())) {
+            Level level = event.getLevel();
+            if (!level.isClientSide()) {
+                level.playSound(null, event.getPos(), net.gruposeis.mullet.sound.ModSounds.TARJETA_PONER.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
+            }
+        }
+    }
 }

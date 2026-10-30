@@ -50,7 +50,7 @@ public class WellPortalEvents {
         if (event.getTo() == WellPortalManager.TIERRAS_PROFUNDAS && event.getEntity() instanceof ServerPlayer player) {
             ServerLevel dungeonWorld = player.server.getLevel(WellPortalManager.TIERRAS_PROFUNDAS);
             if (dungeonWorld != null) {
-                WellPortalManager.ensureMrMulletSpawned(dungeonWorld);
+                WellPortalManager.ensureDungeonPlaced(dungeonWorld);
             }
         }
     }

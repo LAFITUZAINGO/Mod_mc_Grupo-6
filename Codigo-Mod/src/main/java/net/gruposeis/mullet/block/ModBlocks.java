@@ -25,7 +25,8 @@ public class ModBlocks {
     public static final RegistryObject<Block> MULLET_BLOCK = registerBlock("mullet_block",
             () -> new PozoBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
                     .strength(3.0f)
-                    .sound(SoundType.STONE)));
+                    .sound(SoundType.STONE)
+                    .lightLevel(state -> 12)));
 
     // Método auxiliar que registra el bloque y automáticamente crea su correspondiente BlockItem
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {

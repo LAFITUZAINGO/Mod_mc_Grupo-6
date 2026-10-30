@@ -1,4 +1,4 @@
-# Mecánicas y Progresión del Mod
+1# Mecánicas y Progresión del Mod
 
 ## 1. Introducción
 
@@ -32,7 +32,7 @@ La **Llave Moneda** es un objeto necesario para desbloquear el acceso a la dimen
 - 1 Esmeralda.
 - 4 Lingotes de Oro.
 
-La Estrella del Nether debe colocarse en el centro de la mesa de crafteo, mientras que los cuatro lingotes de oro deben ubicarse a su alrededor, formando una cruz.
+La Esmeralda debe colocarse en el centro de la mesa de crafteo, mientras que los cuatro lingotes de oro deben ubicarse a su alrededor, formando una cruz.
 
 **Distribución:**
 

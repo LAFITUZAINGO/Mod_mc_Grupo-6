@@ -69,6 +69,28 @@ public class ComandosMullet {
                                         })
                                 )
                         )
+
+                        // Comando para teletransportarse a la dungeon (sala de la cruz de amatista)
+                        .then(Commands.literal("dungeon")
+                                .executes(context -> {
+                                    ServerPlayer jugador = context.getSource().getPlayerOrException();
+                                    WellPortalManager.teleportToDungeonDimension(jugador);
+                                    context.getSource().sendSuccess(
+                                            () -> Component.literal("Teletransportado a la sala de la cruz de amatista en la dungeon."),
+                                            false
+                                    );
+                                    return Command.SINGLE_SUCCESS;
+                                })
+                        )
+
+                        // Comando para regresar al Overworld
+                        .then(Commands.literal("overworld")
+                                .executes(context -> {
+                                    ServerPlayer jugador = context.getSource().getPlayerOrException();
+                                    WellPortalManager.teleportBackToOverworld(jugador);
+                                    return Command.SINGLE_SUCCESS;
+                                })
+                        )
         );
     }
 

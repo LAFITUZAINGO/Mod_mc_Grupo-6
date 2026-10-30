@@ -114,14 +114,16 @@ esac
 CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
 
 
-# If JAVA_HOME does not exist, try common locations or unset it to use PATH
-if [ -n "$JAVA_HOME" ] && [ ! -d "$JAVA_HOME" ]; then
-    if [ -d "/usr/lib/jvm/java-21-openjdk-amd64" ]; then
+# If JAVA_HOME does not exist or is unset, try common locations or unset it to use PATH
+if [ -z "$JAVA_HOME" ] || [ ! -d "$JAVA_HOME" ]; then
+    if [ -d "/home/manuel/.jdks/ms-17.0.20.1" ]; then
+        JAVA_HOME="/home/manuel/.jdks/ms-17.0.20.1"
+    elif [ -d "/usr/lib/jvm/java-17-openjdk-amd64" ]; then
+        JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"
+    elif [ -d "/usr/lib/jvm/java-21-openjdk-amd64" ]; then
         JAVA_HOME="/usr/lib/jvm/java-21-openjdk-amd64"
     elif [ -d "/usr/lib/jvm/default-java" ]; then
         JAVA_HOME="/usr/lib/jvm/default-java"
-    elif [ -d "/usr/lib/jvm/jdk-25.0.4.1+1" ]; then
-        JAVA_HOME="/usr/lib/jvm/jdk-25.0.4.1+1"
     elif command -v java >/dev/null 2>&1; then
         unset JAVA_HOME
     fi

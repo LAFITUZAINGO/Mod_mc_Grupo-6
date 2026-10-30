@@ -1,5 +1,6 @@
 package net.gruposeis.mullet;
 
+import com.mojang.logging.LogUtils;
 import net.gruposeis.mullet.block.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -15,11 +16,17 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 public class WellPortalManager {
@@ -192,6 +199,56 @@ public class WellPortalManager {
         return false;
     }
 
+    // Origen de coordenadas donde se coloca la dungeon en la dimensión Tierras Profundas
+    public static final BlockPos DUNGEON_ORIGIN = new BlockPos(0, 40, 0);
+
+    // Desplazamiento exacto de la sala con amatistas en forma de cruz dentro de la dungeon
+    // La amatista está en Y=28, por lo que el jugador se posiciona sobre ella en Y=29
+    public static final BlockPos AMETHYST_CROSS_OFFSET = new BlockPos(261, 29, 35);
+
+    // Posición del bloque para volver al Overworld en la habitación negra con bloques verdes
+    public static final BlockPos BLACK_ROOM_RETURN_OFFSET = new BlockPos(101, 28, 180);
+
+    public static void ensureReturnBlock(ServerLevel dungeonWorld) {
+        BlockPos returnPos = DUNGEON_ORIGIN.offset(BLACK_ROOM_RETURN_OFFSET);
+        if (!dungeonWorld.getBlockState(returnPos).is(ModBlocks.MULLET_BLOCK.get())) {
+            dungeonWorld.setBlock(returnPos, ModBlocks.MULLET_BLOCK.get().defaultBlockState(), 3);
+            LogUtils.getLogger().info("Bloque de retorno al Overworld asegurado en {}", returnPos);
+        }
+    }
+
+    public static void ensureDungeonPlaced(ServerLevel dungeonWorld) {
+        DungeonProtectionData data = DungeonProtectionData.get(dungeonWorld);
+        BlockPos crossPos = DUNGEON_ORIGIN.offset(260, 28, 34);
+
+        if (data.isDungeonPlaced() || dungeonWorld.getBlockState(crossPos).is(Blocks.AMETHYST_BLOCK)) {
+            if (!data.isDungeonPlaced()) {
+                data.setDungeonPlaced(true);
+            }
+            ensureReturnBlock(dungeonWorld);
+            return;
+        }
+
+        StructureTemplateManager templateManager = dungeonWorld.getStructureManager();
+        Optional<StructureTemplate> templateOpt = templateManager.get(new ResourceLocation(MulletPozo.MOD_ID, "dungeon"));
+
+        if (templateOpt.isPresent()) {
+            StructureTemplate template = templateOpt.get();
+            StructurePlaceSettings settings = new StructurePlaceSettings()
+                    .setRotation(Rotation.NONE)
+                    .setMirror(Mirror.NONE)
+                    .setIgnoreEntities(false)
+                    .setKnownShape(true);
+
+            template.placeInWorld(dungeonWorld, DUNGEON_ORIGIN, DUNGEON_ORIGIN, settings, dungeonWorld.random, 2);
+            data.setDungeonPlaced(true);
+            ensureReturnBlock(dungeonWorld);
+            LogUtils.getLogger().info("Dungeon colocada exitosamente en Tierras Profundas en la posición {}", DUNGEON_ORIGIN);
+        } else {
+            LogUtils.getLogger().error("No se pudo encontrar la plantilla de estructura mullet:dungeon!");
+        }
+    }
+
     public static void teleportToDungeonDimension(ServerPlayer player) {
         ServerLevel overworld = player.server.getLevel(Level.OVERWORLD);
         if (overworld == null) return;
@@ -214,49 +271,25 @@ public class WellPortalManager {
             return;
         }
 
-        // 3. Construir la Sala 1 flotando en el vacío a Y=64
-        BlockPos center = new BlockPos(0, 64, 0);
+        // 3. Generar la dungeon si aún no ha sido colocada
+        ensureDungeonPlaced(dungeonWorld);
 
-        for (int dx = -3; dx <= 3; dx++) {
-            for (int dz = -3; dz <= 3; dz++) {
-                for (int dy = -1; dy <= 4; dy++) {
-                    BlockPos p = center.offset(dx, dy, dz);
-                    if (dy == -1) {
-                        // Suelo flotante: Baldosas de pizarra profunda
-                        dungeonWorld.setBlock(p, Blocks.DEEPSLATE_TILES.defaultBlockState(), 3);
-                    } else if (dy == 4 || Math.abs(dx) == 3 || Math.abs(dz) == 3) {
-                        // Paredes y techo
-                        if (dy == 3 && Math.abs(dx) == 2 && Math.abs(dz) == 2) {
-                            dungeonWorld.setBlock(p, Blocks.OCHRE_FROGLIGHT.defaultBlockState(), 3);
-                        } else {
-                            dungeonWorld.setBlock(p, Blocks.DEEPSLATE_BRICKS.defaultBlockState(), 3);
-                        }
-                    } else {
-                        // Interior vacío
-                        dungeonWorld.setBlock(p, Blocks.AIR.defaultBlockState(), 3);
-                    }
-                }
-            }
-        }
+        // 4. Teletransportar al jugador a la sala de amatistas en forma de cruz
+        BlockPos spawnPos = DUNGEON_ORIGIN.offset(AMETHYST_CROSS_OFFSET);
+        double spawnX = spawnPos.getX() + 0.5;
+        double spawnY = spawnPos.getY(); // 69.0
+        double spawnZ = spawnPos.getZ() + 0.5;
+        float yaw = 90.0F; // Orientado hacia el pasillo oeste de la sala
+        float pitch = 0.0F;
 
-        // Mesa de crafteo en una esquina
-        dungeonWorld.setBlock(center.offset(2, 0, 2), Blocks.CRAFTING_TABLE.defaultBlockState(), 3);
-
-        // Bloque Mullet en el centro del suelo flotante
-        dungeonWorld.setBlock(center.below(), ModBlocks.MULLET_BLOCK.get().defaultBlockState(), 3);
-
-        // Asegurar que Mr Mullet esté en la sala de la nueva dimensión
-        ensureMrMulletSpawned(dungeonWorld);
-
-        // 4. Teletransportar al jugador a la dimensión flotando en el vacío
-        player.teleportTo(dungeonWorld, 0.5, 64.0, 0.5, player.getYRot(), player.getXRot());
+        dungeonWorld.setDefaultSpawnPos(spawnPos, yaw);
+        player.teleportTo(dungeonWorld, spawnX, spawnY, spawnZ, yaw, pitch);
 
         // 5. Efectos sonoros y mensajes
-        dungeonWorld.playSound(null, center, SoundEvents.PORTAL_TRAVEL, SoundSource.PLAYERS, 0.8f, 1.0f);
-        dungeonWorld.sendParticles(ParticleTypes.PORTAL, 0.5, 64.5, 0.5, 60, 0.6, 0.6, 0.6, 0.1);
+        dungeonWorld.playSound(null, spawnPos, SoundEvents.PORTAL_TRAVEL, SoundSource.PLAYERS, 0.8f, 1.0f);
+        dungeonWorld.sendParticles(ParticleTypes.PORTAL, spawnX, spawnY + 0.5, spawnZ, 60, 0.6, 0.6, 0.6, 0.1);
 
-        player.sendSystemMessage(Component.literal("§5§l[Tierras Profundas]§r §dHas ingresado a la mazmorra en el vacío."));
-        player.sendSystemMessage(Component.literal("§eHaz clic derecho en el §bPozo Mullet§e en el centro para regresar al Overworld."));
+        player.sendSystemMessage(Component.literal("§5§l[Tierras Profundas]§r §dHas ingresado a la mazmorra."));
     }
 
     public static void teleportBackToOverworld(ServerPlayer player) {

@@ -2,15 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     " G ",
-    "GSG",
+    "GEG",
     " G "
   ],
   "key": {
     "G": {
       "item": "minecraft:gold_ingot"
     },
-    "S": {
-      "item": "minecraft:nether_star"
+    "E": {
+      "item": "minecraft:emerald"
     }
   },
   "result": {

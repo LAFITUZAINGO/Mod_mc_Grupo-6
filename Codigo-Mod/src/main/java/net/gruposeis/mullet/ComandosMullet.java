@@ -90,6 +90,100 @@ public class ComandosMullet {
                                     WellPortalManager.teleportBackToOverworld(jugador);
                                     return Command.SINGLE_SUCCESS;
                                 })
+
+                        // Comando para spawnear o resetear al boss Mr Mullet en la sala circular
+                        .then(Commands.literal("boss")
+                                .executes(context -> {
+                                    ServerPlayer jugador = context.getSource().getPlayerOrException();
+                                    net.minecraft.server.level.ServerLevel dungeonLevel = jugador.server.getLevel(WellPortalManager.TIERRAS_PROFUNDAS);
+                                    if (dungeonLevel != null) {
+                                        DungeonProtectionData data = DungeonProtectionData.get(dungeonLevel);
+                                        data.setMrMulletDefeated(false);
+                                        data.setMrMulletSpawned(false);
+                                        WellPortalManager.ensureMrMulletSpawned(dungeonLevel);
+                                        context.getSource().sendSuccess(
+                                                () -> Component.literal("§aBoss Mr Mullet posicionado en la sala circular."),
+                                                false
+                                        );
+                                    } else {
+                                        context.getSource().sendFailure(Component.literal("§cNo se pudo acceder a la dimensión Tierras Profundas."));
+                                    }
+                                    return Command.SINGLE_SUCCESS;
+                                })
+                        )
+
+                        // Comando para spawnear o resetear todos los mobs de la dungeon segun Dungeon.md
+                        .then(Commands.literal("mobs")
+                                .executes(context -> {
+                                    ServerPlayer jugador = context.getSource().getPlayerOrException();
+                                    net.minecraft.server.level.ServerLevel dungeonLevel = jugador.server.getLevel(WellPortalManager.TIERRAS_PROFUNDAS);
+                                    if (dungeonLevel != null) {
+                                        WellPortalManager.spawnDungeonMobs(dungeonLevel);
+                                        DungeonProtectionData.get(dungeonLevel).setDungeonMobsSpawned(true);
+                                        context.getSource().sendSuccess(
+                                                () -> Component.literal("§aMobs de la dungeon generados exitosamente en Fase 1 y Fase 2."),
+                                                false
+                                        );
+                                    } else {
+                                        context.getSource().sendFailure(Component.literal("§cNo se pudo acceder a la dimension Tierras Profundas."));
+                                    }
+                                    return Command.SINGLE_SUCCESS;
+                                })
+                        )
+
+                        // Comando para inspeccionar o restablecer las barreras invisibles de la mazmorra
+                        .then(Commands.literal("barreras")
+                                .then(Commands.literal("colocar")
+                                        .executes(context -> {
+                                            ServerPlayer jugador = context.getSource().getPlayerOrException();
+                                            net.minecraft.server.level.ServerLevel dungeonLevel = jugador.server.getLevel(WellPortalManager.TIERRAS_PROFUNDAS);
+                                            if (dungeonLevel != null) {
+                                                WellPortalManager.placeDungeonBarriers(dungeonLevel);
+                                                context.getSource().sendSuccess(() -> Component.literal("§aBarreras colocadas en todas las salas no despejadas."), false);
+                                            } else {
+                                                context.getSource().sendFailure(Component.literal("§cNo se pudo acceder a la dimension Tierras Profundas."));
+                                            }
+                                            return Command.SINGLE_SUCCESS;
+                                        })
+                                )
+                                .then(Commands.literal("reset")
+                                        .executes(context -> {
+                                            ServerPlayer jugador = context.getSource().getPlayerOrException();
+                                            net.minecraft.server.level.ServerLevel dungeonLevel = jugador.server.getLevel(WellPortalManager.TIERRAS_PROFUNDAS);
+                                            if (dungeonLevel != null) {
+                                                WellPortalManager.resetDungeonBarriers(dungeonLevel);
+                                                context.getSource().sendSuccess(() -> Component.literal("§aTodas las barreras han sido reiniciadas y colocadas."), false);
+                                            } else {
+                                                context.getSource().sendFailure(Component.literal("§cNo se pudo acceder a la dimension Tierras Profundas."));
+                                            }
+                                            return Command.SINGLE_SUCCESS;
+                                        })
+                                )
+                                .then(Commands.literal("info")
+                                        .executes(context -> {
+                                            ServerPlayer jugador = context.getSource().getPlayerOrException();
+                                            net.minecraft.server.level.ServerLevel dungeonLevel = jugador.server.getLevel(WellPortalManager.TIERRAS_PROFUNDAS);
+                                            if (dungeonLevel != null) {
+                                                DungeonProtectionData data = DungeonProtectionData.get(dungeonLevel);
+                                                int f1n1 = WellPortalManager.getRemainingMobs(dungeonLevel, "dungeon_room_f1_n1");
+                                                int f1n2 = WellPortalManager.getRemainingMobs(dungeonLevel, "dungeon_room_f1_n2");
+                                                int f1n3 = WellPortalManager.getRemainingMobs(dungeonLevel, "dungeon_room_f1_n3");
+                                                int f2n1 = WellPortalManager.getRemainingMobs(dungeonLevel, "dungeon_room_f2_n1");
+                                                int f2n2 = WellPortalManager.getRemainingMobs(dungeonLevel, "dungeon_room_f2_n2");
+                                                int f2n3 = WellPortalManager.getRemainingMobs(dungeonLevel, "dungeon_room_f2_n3");
+
+                                                jugador.sendSystemMessage(Component.literal("§6§l=== ESTADO DE SALAS Y BARRERAS ==="));
+                                                jugador.sendSystemMessage(Component.literal("§eFase 1 - Nivel 1: §f" + f1n1 + " mobs §7| Puerta abierta: " + data.isGateCleared(WellPortalManager.GATE_F1_N1)));
+                                                jugador.sendSystemMessage(Component.literal("§eFase 1 - Nivel 2: §f" + f1n2 + " mobs §7| Puerta abierta: " + data.isGateCleared(WellPortalManager.GATE_F1_N2)));
+                                                jugador.sendSystemMessage(Component.literal("§eFase 1 - Nivel 3: §f" + f1n3 + " mobs §7| Cofre 1/Hub abierto: " + data.isGateCleared(WellPortalManager.GATE_F1_N3)));
+                                                jugador.sendSystemMessage(Component.literal("§eFase 2 - Nivel 1: §f" + f2n1 + " mobs §7| Puerta abierta: " + data.isGateCleared(WellPortalManager.GATE_F2_N1)));
+                                                jugador.sendSystemMessage(Component.literal("§eFase 2 - Nivel 2: §f" + f2n2 + " mobs §7| Puerta abierta: " + data.isGateCleared(WellPortalManager.GATE_F2_N2)));
+                                                jugador.sendSystemMessage(Component.literal("§eFase 2 - Nivel 3: §f" + f2n3 + " mobs §7| Cofre 2 abierto: " + data.isGateCleared(WellPortalManager.GATE_F2_N3)));
+                                            }
+                                            return Command.SINGLE_SUCCESS;
+                                        })
+                                )
+                        )
                         )
 
                         // Comando para reproducir y probar cada sonido del mod

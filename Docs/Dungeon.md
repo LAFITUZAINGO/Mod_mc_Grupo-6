@@ -121,11 +121,14 @@ Al completar la Fase 2 se obtiene la segunda **tarjeta amarilla**.
 
 Existen dos tarjetas amarillas dentro de la dungeon.
 
-Cada una se obtiene después de superar una de las fases principales.
+Cada una se obtiene después de superar una de las fases principales (encontrándose dentro de los dos cofres de recompensa de la dungeon, una tarjeta por cofre):
+
+- **Cofre 1:** Ubicado tras superar la Fase 1 (contiene 1 Tarjeta Amarilla).
+- **Cofre 2:** Ubicado tras superar la Fase 2 (contiene 1 Tarjeta Amarilla).
 
 ```text
-Fase 1 → Tarjeta amarilla
-Fase 2 → Tarjeta amarilla
+Fase 1 → Cofre 1 → Tarjeta amarilla
+Fase 2 → Cofre 2 → Tarjeta amarilla
 ```
 
 Las dos tarjetas amarillas se utilizan para fabricar la **tarjeta roja**.
@@ -168,72 +171,63 @@ Los ataques y estadísticas exactas del jefe se definirán en la documentación 
 
 # 7. Loot
 
-Los cofres de la dungeon pueden contener diferentes objetos.
+El loot de suministros y recompensas generales se encuentra distribuido en los **barriles** de la sala de barriles, mientras que los **dos cofres** principales contienen las **Tarjetas Amarillas** de progresión (una por cofre).
 
-Las probabilidades indicadas representan la posibilidad de aparición de cada objeto.
+### Características del loot en barriles:
+- **Tiradas mínimas garantizadas:** Cada barril genera entre **4 y 6 objetos** (`rolls: 4..6`), evitando que queden vacíos o semivacíos.
+- **Mayor cantidad en objetos de valor:** Los minerales y recursos valiosos (que no son herramientas/armaduras) aparecen en mayores cantidades/stacks cuando se generan.
+- **Herramientas y equipamiento:** Aparecen de forma individual (1 unidad).
 
-> **Nota:** las probabilidades de esta tabla no suman 100 %, ya que representan probabilidades individuales de aparición y no una distribución única en la que solamente pueda salir un objeto.
+## Tabla de loot (Barriles)
 
-## Tabla de loot
-
-| Objeto | Probabilidad |
-|---|---:|
-| 8 bloques de adoquín | 12% |
-| Un solo palo | 12% |
-| Tierra | 10% |
-| Hilo | 9% |
-| Huesos | 9% |
-| Carne podrida | 9% |
-| Grava | 8% |
-| Papel | 8% |
-| Semillas de trigo | 8% |
-| Ojo de araña | 7% |
-| Tinte gris | 7% |
-| Un cuenco | 7% |
-| Patata venenosa | 6% |
-| Arena | 6% |
-| Bota de cuero | 5% |
-| Azada de madera | 5% |
-| Manzana normal | 5% |
-| Cuerda | 5% |
-| Pico de hierro | 4% |
-| Escudo dañado | 4% |
-| Caña de pescar | 4% |
-| Bloque de musgo | 4% |
-| Lingote de hierro | 3% |
-| Lingote de oro | 3% |
-| Lingote de cobre | 3% |
-| Zanahoria | 3% |
-| Botella de miel | 3% |
-| Armadura de hierro sin encantar | 2,5% |
-| Armadura de diamante sin encantar | 1,5% |
-| Espada de diamante sin encantar | 1,5% |
-| Pico de diamante sin encantar | 1,5% |
-| Esmeraldas | 1,5% |
-| Libro encantado | 1% |
-| Diamantes | 0,8% |
-| Manzana dorada | 0,5% |
-| Plantilla de herrería de centinela | 0,5% |
-| Plantilla de herrería de dunas | 0,5% |
-| Plantilla de herrería de costa | 0,5% |
-| Plantilla de herrería de anfitrión | 0,2% |
+| Objeto | Cantidad por aparición | Probabilidad relativa (peso) |
+|---|:---:|---:|
+| 8 bloques de adoquín | 8 | 12% |
+| Un solo palo | 1 | 12% |
+| Tierra | 2 – 6 | 10% |
+| Hilo | 1 – 3 | 9% |
+| Huesos | 2 – 5 | 9% |
+| Carne podrida | 2 – 5 | 9% |
+| Grava | 2 – 6 | 8% |
+| Papel | 2 – 5 | 8% |
+| Semillas de trigo | 2 – 5 | 8% |
+| Ojo de araña | 1 – 3 | 7% |
+| Tinte gris | 1 – 3 | 7% |
+| Un cuenco | 1 | 7% |
+| Patata venenosa | 1 | 6% |
+| Arena | 2 – 6 | 6% |
+| Bota de cuero | 1 | 5% |
+| Azada de madera | 1 | 5% |
+| Manzana normal | 2 – 4 | 5% |
+| Cuerda | 1 | 5% |
+| Pico de hierro | 1 | 4% |
+| Escudo dañado | 1 | 4% |
+| Caña de pescar | 1 | 4% |
+| Bloque de musgo | 2 – 6 | 4% |
+| Lingote de hierro | 4 – 10 | 3% |
+| Lingote de oro | 3 – 8 | 3% |
+| Lingote de cobre | 6 – 16 | 3% |
+| Zanahoria | 4 – 8 | 3% |
+| Botella de miel | 2 – 4 | 3% |
+| Armadura de hierro sin encantar | 1 | 2,5% |
+| Armadura de diamante sin encantar | 1 | 1,5% |
+| Espada de diamante sin encantar | 1 | 1,5% |
+| Pico de diamante sin encantar | 1 | 1,5% |
+| Esmeraldas | 3 – 7 | 1,5% |
+| Libro encantado | 1 | 1% |
+| Diamantes | 2 – 5 | 0,8% |
+| Manzana dorada | 1 – 3 | 0,5% |
+| Plantilla de herrería de centinela | 1 – 2 | 0,5% |
+| Plantilla de herrería de dunas | 1 – 2 | 0,5% |
+| Plantilla de herrería de costa | 1 – 2 | 0,5% |
+| Plantilla de herrería de anfitrión | 1 – 2 | 0,2% |
 
 ---
 
 # 8. Distribución del loot
 
-Los cofres se distribuirán alrededor de las zonas de enemigos.
-
-Su posición seguirá el diseño de la dungeon.
-
-Los cofres estarán ubicados principalmente:
-
-- Antes de las salas de enemigos.
-- Después de superar determinadas zonas.
-- En habitaciones laterales.
-- En zonas especiales de recompensa.
-
-La ubicación exacta de cada cofre se determinará mediante el diseño definitivo de la estructura.
+- **Cofres principales (2):** Ubicados como recompensa al completar cada una de las fases de combate (Fase 1 y Fase 2). Cada cofre contiene una Tarjeta Amarilla indispensable para progresar hacia la sala del jefe.
+- **Sala de barriles:** Gran sala de almacenamiento que concentra los barriles de la dungeon con el loot de suministros y recursos de la tabla anterior.
 
 ---
 
@@ -250,7 +244,7 @@ Fase 1 - Nivel 2
    ↓
 Fase 1 - Nivel 3
    ↓
-Tarjeta amarilla
+Cofre 1 (Tarjeta amarilla)
    ↓
 Fase 2 - Nivel 1
    ↓
@@ -258,7 +252,7 @@ Fase 2 - Nivel 2
    ↓
 Fase 2 - Nivel 3
    ↓
-Tarjeta amarilla
+Cofre 2 (Tarjeta amarilla)
    ↓
 Fabricar tarjeta roja
    ↓
@@ -297,9 +291,9 @@ Las recompensas exactas todavía están **pendientes de definir**.
 | Fase 1 | Pendiente |
 | Fase 2 | Pendiente |
 | Sistema de enemigos | Pendiente |
-| Sistema de loot | Pendiente |
-| Tarjeta amarilla | Pendiente |
-| Tarjeta roja | Pendiente |
+| Sistema de loot | Implementado |
+| Tarjeta amarilla | Implementado |
+| Tarjeta roja | Implementado |
 | Sala de MR Mullet | Pendiente |
 | MR Mullet | Pendiente |
 | Recompensas | Pendiente |

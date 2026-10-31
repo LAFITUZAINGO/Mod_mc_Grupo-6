@@ -61,7 +61,7 @@ public class MulletPozo {
         event.register(ModEntities.MR_MULLET.get(),
                 net.minecraft.world.entity.SpawnPlacements.Type.ON_GROUND,
                 net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                (entityType, serverLevelAccessor, mobSpawnType, blockPos, randomSource) -> true,
+                (entityType, serverLevelAccessor, mobSpawnType, blockPos, randomSource) -> false,
                 net.minecraftforge.event.entity.SpawnPlacementRegisterEvent.Operation.REPLACE);
     }
 

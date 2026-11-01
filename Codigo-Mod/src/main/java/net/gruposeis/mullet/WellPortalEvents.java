@@ -61,7 +61,6 @@ public class WellPortalEvents {
 
             // En cada fase/sala de la dimensión Tierras Profundas, cuando queden solo tres mobs (o menos), dejarlos con Luminiscencia
             if (serverLevel.dimension() == WellPortalManager.TIERRAS_PROFUNDAS && serverLevel.getGameTime() % 20L == 0L) {
-                WellPortalManager.cleanupTrappedMazeMobs(serverLevel);
                 WellPortalManager.updateAllPhasesLuminiscence(serverLevel);
             }
         }

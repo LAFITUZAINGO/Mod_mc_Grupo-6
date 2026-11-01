@@ -572,7 +572,6 @@ public class WellPortalManager {
     public static void ensureDungeonMobsSpawned(ServerLevel dungeonWorld) {
         DungeonProtectionData data = DungeonProtectionData.get(dungeonWorld);
         if (data.isDungeonMobsSpawned()) {
-            cleanupTrappedMazeMobs(dungeonWorld);
             return;
         }
         spawnDungeonMobs(dungeonWorld);
@@ -688,26 +687,10 @@ public class WellPortalManager {
         LogUtils.getLogger().info("Mobs de la dungeon generados exitosamente en Fase 1 y Fase 2.");
     }
 
-    public static void cleanupTrappedMazeMobs(ServerLevel level) {
-        for (net.minecraft.world.entity.Entity e : level.getAllEntities()) {
-            if (e instanceof LivingEntity living && living.isAlive() && !living.isRemoved() && living.getTags().contains("dungeon_room_f2_n1")) {
-                int relX = living.getBlockX() - DUNGEON_ORIGIN.getX();
-                int relZ = living.getBlockZ() - DUNGEON_ORIGIN.getZ();
-                if (relX >= 71 && relX <= 126 && relZ >= 24 && relZ <= 70) {
-                    living.teleportTo(DUNGEON_ORIGIN.getX() + 55.5, DUNGEON_ORIGIN.getY() + 28, DUNGEON_ORIGIN.getZ() + 35.5);
-                }
-            }
-        }
-    }
-
     private static List<BlockPos> findWalkableSpots(ServerLevel level, int minX, int maxX, int minZ, int maxZ) {
         List<BlockPos> spots = new java.util.ArrayList<>();
         for (int x = minX; x <= maxX; x++) {
             for (int z = minZ; z <= maxZ; z++) {
-                // Hard guard: NUNCA spawnear mobs dentro del laberinto central
-                if (x >= 71 && x <= 126 && z >= 24 && z <= 70) {
-                    continue;
-                }
                 BlockPos pos = DUNGEON_ORIGIN.offset(x, 28, z);
                 level.getChunkSource().getChunk(pos.getX() >> 4, pos.getZ() >> 4, ChunkStatus.FULL, true);
                 BlockState floor = level.getBlockState(pos.below());
@@ -765,10 +748,10 @@ public class WellPortalManager {
                 }
             }
             case GATE_F1_N3 -> {
-                // Pasaje hacia el pasillo central en X=130, Z=33..36
-                for (int z = 33; z <= 36; z++) {
+                // Permite entrar libremente al laberinto desde Fase 1, pero bloquea el acceso hacia la otra sala (Fase 2) en X=71
+                for (int z = 10; z <= 59; z++) {
                     for (int y = 28; y <= 33; y++) {
-                        positions.add(DUNGEON_ORIGIN.offset(130, y, z));
+                        positions.add(DUNGEON_ORIGIN.offset(71, y, z));
                     }
                 }
                 // Jaula protectora alrededor del Cofre 1 en (149, 30, 70)
@@ -786,6 +769,12 @@ public class WellPortalManager {
                 for (int z = 15; z <= 55; z++) {
                     for (int y = 28; y <= 31; y++) {
                         positions.add(DUNGEON_ORIGIN.offset(41, y, z));
+                    }
+                }
+                // Permite entrar al laberinto desde Fase 2, pero bloquea el paso hacia la otra sala (Fase 1) en X=130
+                for (int z = 33; z <= 36; z++) {
+                    for (int y = 28; y <= 33; y++) {
+                        positions.add(DUNGEON_ORIGIN.offset(130, y, z));
                     }
                 }
             }
@@ -864,7 +853,7 @@ public class WellPortalManager {
         return switch (gateId) {
             case GATE_F1_N1 -> Component.literal("§a§l[Mazmorra]§r §a¡Fase 1 - Nivel 1 despejado! La barrera hacia la sala del Nivel 2 ha desaparecido.");
             case GATE_F1_N2 -> Component.literal("§a§l[Mazmorra]§r §a¡Fase 1 - Nivel 2 despejado! La barrera hacia la sala del Nivel 3 ha desaparecido.");
-            case GATE_F1_N3 -> Component.literal("§6§l[Mazmorra]§r §6¡Fase 1 completada con éxito!§a El Cofre 1 y el pasillo central han sido desbloqueados.");
+            case GATE_F1_N3 -> Component.literal("§6§l[Mazmorra]§r §6¡Fase 1 completada con éxito!§a El Cofre 1 y la entrada a la Fase 2 han sido desbloqueados.");
             case GATE_F2_N1 -> Component.literal("§a§l[Mazmorra]§r §a¡Fase 2 - Nivel 1 despejado! La barrera hacia la sala del Nivel 2 ha desaparecido.");
             case GATE_F2_N2 -> Component.literal("§a§l[Mazmorra]§r §a¡Fase 2 - Nivel 2 despejado! La barrera hacia la sala del Nivel 3 ha desaparecido.");
             case GATE_F2_N3 -> Component.literal("§6§l[Mazmorra]§r §6¡Fase 2 completada con éxito!§a El Cofre 2 ha sido desbloqueado. ¡Ya puedes fabricar la Tarjeta Roja!");

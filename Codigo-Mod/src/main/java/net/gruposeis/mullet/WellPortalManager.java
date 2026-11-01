@@ -2,6 +2,8 @@ package net.gruposeis.mullet;
 
 import com.mojang.logging.LogUtils;
 import net.gruposeis.mullet.block.ModBlocks;
+import net.gruposeis.mullet.entity.ModEntities;
+import net.gruposeis.mullet.entity.custom.ProfesorMulletEntity;
 import net.gruposeis.mullet.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -210,11 +212,13 @@ public class WellPortalManager {
         return getWellPortalY(player.level(), player.getBoundingBox().inflate(0.1)) != null;
     }
 
-    private static boolean hasEndPortalFrameNearby(Level level, BlockPos pos) {
-        for (int dx = -3; dx <= 3; dx++) {
-            for (int dz = -3; dz <= 3; dz++) {
-                if (level.getBlockState(pos.offset(dx, 0, dz)).is(Blocks.END_PORTAL_FRAME)) {
-                    return true;
+    public static boolean hasEndPortalFrameNearby(Level level, BlockPos pos) {
+        for (int dx = -4; dx <= 4; dx++) {
+            for (int dy = -3; dy <= 3; dy++) {
+                for (int dz = -4; dz <= 4; dz++) {
+                    if (level.getBlockState(pos.offset(dx, dy, dz)).is(Blocks.END_PORTAL_FRAME)) {
+                        return true;
+                    }
                 }
             }
         }
@@ -385,10 +389,43 @@ public class WellPortalManager {
             overworld.playSound(null, player.blockPosition(), ModSounds.DIMENSION_SALIR.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
             overworld.sendParticles(ParticleTypes.PORTAL, player.getX(), player.getY() + 1.0, player.getZ(), 50, 0.5, 0.5, 0.5, 0.2);
             player.sendSystemMessage(Component.literal("§a§l[Pozo Mullet]§r §a¡Has regresado sano y salvo al Overworld!"));
+
+            // Spawnea al Profesor Mullet rescatado y agradece en el chat
+            spawnRescuedProfessor(overworld, player);
         } else {
             // Ya está en el Overworld
             player.sendSystemMessage(Component.literal("§6§l[Pozo Mullet]§r §eYa te encuentras en el Overworld."));
         }
+    }
+
+    private static void spawnRescuedProfessor(ServerLevel overworld, ServerPlayer player) {
+        net.minecraft.world.phys.AABB checkArea = player.getBoundingBox().inflate(20.0D);
+        java.util.List<ProfesorMulletEntity> nearby = overworld.getEntitiesOfClass(ProfesorMulletEntity.class, checkArea);
+
+        // Si ya hay un Profesor Mullet cerca, no creamos otro para evitar duplicados
+        ProfesorMulletEntity profesor;
+        if (nearby.isEmpty()) {
+            double angleRad = Math.toRadians(player.getYRot() + 30.0);
+            double spawnX = player.getX() - Math.sin(angleRad) * 2.5;
+            double spawnZ = player.getZ() + Math.cos(angleRad) * 2.5;
+            int spawnY = overworld.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int) Math.floor(spawnX), (int) Math.floor(spawnZ));
+
+            profesor = ModEntities.PROFESOR_MULLET.get().create(overworld);
+            if (profesor != null) {
+                profesor.moveTo(spawnX, spawnY, spawnZ, player.getYRot() + 180.0F, 0.0F);
+                overworld.addFreshEntity(profesor);
+            }
+        } else {
+            profesor = nearby.get(0);
+        }
+
+        // Efectos y agradecimiento en el chat
+        overworld.playSound(null, player.blockPosition(), SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.PLAYERS, 1.0F, 1.0F);
+        if (profesor != null) {
+            overworld.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, profesor.getX(), profesor.getY() + 1.0, profesor.getZ(), 35, 0.4, 0.6, 0.4, 0.2);
+            overworld.sendParticles(ParticleTypes.HAPPY_VILLAGER, profesor.getX(), profesor.getY() + 1.2, profesor.getZ(), 15, 0.3, 0.5, 0.3, 0.1);
+        }
+        player.sendSystemMessage(Component.literal("§6§l[Profesor Mullet]§r §f¡Muchas gracias por salvarme! Ese malware de Pintaluba casi acaba conmigo... ¡Te debo la vida!"));
     }
 
     public static void ensureMrMulletSpawned(ServerLevel dungeonWorld) {

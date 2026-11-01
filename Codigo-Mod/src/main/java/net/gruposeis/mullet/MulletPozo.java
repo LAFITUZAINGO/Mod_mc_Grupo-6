@@ -5,8 +5,11 @@ import net.gruposeis.mullet.block.ModBlocks;
 import net.gruposeis.mullet.entity.ModEntities;
 import net.gruposeis.mullet.entity.client.MrMulletModel;
 import net.gruposeis.mullet.entity.client.MrMulletRenderer;
+import net.gruposeis.mullet.entity.client.ProfesorMulletRenderer;
 import net.gruposeis.mullet.entity.custom.MrMulletEntity;
+import net.gruposeis.mullet.entity.custom.ProfesorMulletEntity;
 import net.gruposeis.mullet.item.ModItems;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -55,6 +58,7 @@ public class MulletPozo {
 
     private void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(ModEntities.MR_MULLET.get(), MrMulletEntity.createAttributes().build());
+        event.put(ModEntities.PROFESOR_MULLET.get(), ProfesorMulletEntity.createAttributes().build());
     }
 
     private void entitySpawnPlacement(net.minecraftforge.event.entity.SpawnPlacementRegisterEvent event) {
@@ -101,6 +105,8 @@ public class MulletPozo {
         @SubscribeEvent
         public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
             event.registerEntityRenderer(ModEntities.MR_MULLET.get(), MrMulletRenderer::new);
+            event.registerEntityRenderer(ModEntities.CARD_PROJECTILE.get(), context -> new ThrownItemRenderer<>(context, 1.2F, true));
+            event.registerEntityRenderer(ModEntities.PROFESOR_MULLET.get(), ProfesorMulletRenderer::new);
         }
 
         @SubscribeEvent

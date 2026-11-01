@@ -1,5 +1,6 @@
 package net.gruposeis.mullet;
 
+import net.gruposeis.mullet.entity.custom.MrMulletEntity;
 import net.gruposeis.mullet.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -7,16 +8,22 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import java.util.List;
 
 @Mod.EventBusSubscriber(modid = MulletPozo.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class WellPortalEvents {
@@ -51,6 +58,43 @@ public class WellPortalEvents {
     public static void onLevelTick(TickEvent.LevelTickEvent event) {
         if (!event.level.isClientSide() && event.phase == TickEvent.Phase.END && event.level instanceof ServerLevel serverLevel) {
             WellPortalManager.tickCoins(serverLevel);
+
+            // En cada fase/sala de la dimensión Tierras Profundas, cuando queden solo tres mobs (o menos), dejarlos con Luminiscencia
+            if (serverLevel.dimension() == WellPortalManager.TIERRAS_PROFUNDAS && serverLevel.getGameTime() % 20L == 0L) {
+                applyLuminiscenceToRemainingMobs(serverLevel);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingDeath(LivingDeathEvent event) {
+        if (event.getEntity().level().isClientSide()) return;
+        if (!(event.getEntity().level() instanceof ServerLevel serverLevel)) return;
+        if (serverLevel.dimension() != WellPortalManager.TIERRAS_PROFUNDAS) return;
+
+        WellPortalManager.checkDungeonRoomClear(serverLevel, event.getEntity());
+
+        // Al morir un mob en Tierras Profundas, comprobar si ahora quedan 3 o menos mobs para aplicar Luminiscencia
+        if (event.getEntity() instanceof Monster) {
+            applyLuminiscenceToRemainingMobs(serverLevel);
+        }
+    }
+
+    private static void applyLuminiscenceToRemainingMobs(ServerLevel serverLevel) {
+        for (ServerPlayer player : serverLevel.players()) {
+            AABB searchBox = player.getBoundingBox().inflate(35.0D);
+            List<net.minecraft.world.entity.LivingEntity> hostiles = serverLevel.getEntitiesOfClass(
+                    net.minecraft.world.entity.LivingEntity.class,
+                    searchBox,
+                    entity -> entity.isAlive() && (entity instanceof Monster || (entity instanceof net.minecraft.world.entity.animal.Rabbit r && r.getVariant() == net.minecraft.world.entity.animal.Rabbit.Variant.EVIL))
+            );
+
+            // Cuando queden solo tres mobs (o menos de 3), dejarlos con Luminiscencia (Glowing)
+            if (hostiles.size() > 0 && hostiles.size() <= 3) {
+                for (net.minecraft.world.entity.LivingEntity mob : hostiles) {
+                    mob.addEffect(new MobEffectInstance(MobEffects.GLOWING, 60, 0, false, false, true));
+                }
+            }
         }
     }
 
@@ -70,11 +114,10 @@ public class WellPortalEvents {
     @SubscribeEvent
     public static void onTravelToDimension(EntityTravelToDimensionEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            // El portal reutiliza los bloques de End Portal por su textura y animación cósmica,
-            // pero cancelamos el viaje al End vainilla y enviamos al jugador a la dimensión Tierras Profundas.
-            if (event.getDimension() == Level.END) {
-                Double portalY = WellPortalManager.getWellPortalY(player.level(), player.getBoundingBox().inflate(0.2));
-                if (portalY != null) {
+            // El portal reutiliza la textura y apariencia del portal del End, pero se intercepta el viaje para
+            // que NUNCA vaya al End vainilla y siempre conduzca a la dimensión Tierras Profundas.
+            if (event.getDimension() == Level.END && player.level().dimension() == Level.OVERWORLD) {
+                if (!WellPortalManager.hasEndPortalFrameNearby(player.level(), player.blockPosition())) {
                     event.setCanceled(true);
                     WellPortalManager.teleportToDungeonDimension(player);
                 }
@@ -99,16 +142,7 @@ public class WellPortalEvents {
     }
 
     @SubscribeEvent
-    public static void onLivingDeath(LivingDeathEvent event) {
-        if (event.getEntity().level().isClientSide()) return;
-        if (!(event.getEntity().level() instanceof ServerLevel serverLevel)) return;
-        if (serverLevel.dimension() != WellPortalManager.TIERRAS_PROFUNDAS) return;
-
-        WellPortalManager.checkDungeonRoomClear(serverLevel, event.getEntity());
-    }
-
-    @SubscribeEvent
-    public static void onPlayerRightClickBlock(net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock event) {
+    public static void onPlayerRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         Level level = event.getLevel();
         BlockPos pos = event.getPos();
 
@@ -152,7 +186,7 @@ public class WellPortalEvents {
     }
 
     @SubscribeEvent
-    public static void onPlayerLeftClickBlock(net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock event) {
+    public static void onPlayerLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
         Level level = event.getLevel();
         BlockPos pos = event.getPos();
 

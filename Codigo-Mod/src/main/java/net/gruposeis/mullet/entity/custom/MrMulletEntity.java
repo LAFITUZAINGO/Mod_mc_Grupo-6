@@ -240,7 +240,7 @@ public class MrMulletEntity extends PathfinderMob {
             if (this.activeCamejitos.size() > 0 && this.activeCamejitos.size() <= 3) {
                 for (Rabbit camejito : this.activeCamejitos) {
                     camejito.setGlowingTag(true);
-                    camejito.addEffect(new MobEffectInstance(MobEffects.GLOWING, 100, 0, false, false, true));
+                    camejito.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200, 0, false, true, true));
                 }
             } else if (this.activeCamejitos.size() > 3) {
                 for (Rabbit camejito : this.activeCamejitos) {

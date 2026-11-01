@@ -572,6 +572,7 @@ public class WellPortalManager {
     public static void ensureDungeonMobsSpawned(ServerLevel dungeonWorld) {
         DungeonProtectionData data = DungeonProtectionData.get(dungeonWorld);
         if (data.isDungeonMobsSpawned()) {
+            cleanupTrappedMazeMobs(dungeonWorld);
             return;
         }
         spawnDungeonMobs(dungeonWorld);
@@ -592,8 +593,8 @@ public class WellPortalManager {
             spawnMob(level, EntityType.SKELETON, spotsF1N1.get(idx++), "dungeon_room_f1_n1", s -> equipBow(s, null, 0));
         }
 
-        // FASE 1 - Nivel 2 (X=[125..155], Z=[15..45]): 12 Zombies (4 armadura hierro), 7 Esqueletos (3 arco encantado)
-        List<BlockPos> spotsF1N2 = findWalkableSpots(level, 125, 155, 15, 45);
+        // FASE 1 - Nivel 2 (X=[132..155], Z=[15..45]): 12 Zombies (4 armadura hierro), 7 Esqueletos (3 arco encantado)
+        List<BlockPos> spotsF1N2 = findWalkableSpots(level, 132, 155, 15, 45);
         Collections.shuffle(spotsF1N2, new java.util.Random(102));
         idx = 0;
         for (int i = 0; i < 4 && idx < spotsF1N2.size(); i++) {
@@ -609,8 +610,8 @@ public class WellPortalManager {
             spawnMob(level, EntityType.SKELETON, spotsF1N2.get(idx++), "dungeon_room_f1_n2", s -> equipBow(s, null, 0));
         }
 
-        // FASE 1 - Nivel 3 (X=[120..185], Z=[60..76]): 16 Zombies (6 armadura hierro), 2 Zombies (armadura diamante), 10 Esqueletos (4 arco encantado)
-        List<BlockPos> spotsF1N3 = findWalkableSpots(level, 120, 185, 60, 76);
+        // FASE 1 - Nivel 3 (X=[132..185], Z=[61..76]): 16 Zombies (6 armadura hierro), 2 Zombies (armadura diamante), 10 Esqueletos (4 arco encantado)
+        List<BlockPos> spotsF1N3 = findWalkableSpots(level, 132, 185, 61, 76);
         Collections.shuffle(spotsF1N3, new java.util.Random(103));
         idx = 0;
         for (int i = 0; i < 2 && idx < spotsF1N3.size(); i++) {
@@ -629,8 +630,9 @@ public class WellPortalManager {
             spawnMob(level, EntityType.SKELETON, spotsF1N3.get(idx++), "dungeon_room_f1_n3", s -> equipBow(s, null, 0));
         }
 
-        // FASE 2 - Nivel 1 (X=[55..80], Z=[15..55]): 12 Zombies (4 armadura hierro), 8 Esqueletos
-        List<BlockPos> spotsF2N1 = findWalkableSpots(level, 55, 80, 15, 55);
+        // FASE 2 - Nivel 1 (X=[42..68], Z=[15..55]): 12 Zombies (4 armadura hierro), 8 Esqueletos
+        // Estrictamente antes del laberinto (X < 71), dentro de la sala carmesi accesible al jugador
+        List<BlockPos> spotsF2N1 = findWalkableSpots(level, 42, 68, 15, 55);
         Collections.shuffle(spotsF2N1, new java.util.Random(201));
         idx = 0;
         for (int i = 0; i < 4 && idx < spotsF2N1.size(); i++) {
@@ -643,8 +645,8 @@ public class WellPortalManager {
             spawnMob(level, EntityType.SKELETON, spotsF2N1.get(idx++), "dungeon_room_f2_n1", s -> equipBow(s, null, 0));
         }
 
-        // FASE 2 - Nivel 2 (X=[10..55], Z=[15..55]): 16 Zombies (6 armadura hierro), 10 Esqueletos (5 arco con Empuje)
-        List<BlockPos> spotsF2N2 = findWalkableSpots(level, 10, 55, 15, 55);
+        // FASE 2 - Nivel 2 (X=[10..40], Z=[15..55]): 16 Zombies (6 armadura hierro), 10 Esqueletos (5 arco con Empuje)
+        List<BlockPos> spotsF2N2 = findWalkableSpots(level, 10, 40, 15, 55);
         Collections.shuffle(spotsF2N2, new java.util.Random(202));
         idx = 0;
         for (int i = 0; i < 6 && idx < spotsF2N2.size(); i++) {
@@ -660,8 +662,8 @@ public class WellPortalManager {
             spawnMob(level, EntityType.SKELETON, spotsF2N2.get(idx++), "dungeon_room_f2_n2", s -> equipBow(s, null, 0));
         }
 
-        // FASE 2 - Nivel 3 (X=[15..60], Z=[60..76]): 20 Zombies (8 armadura hierro, 3 armadura diamante), 12 Esqueletos (6 arco encantado)
-        List<BlockPos> spotsF2N3 = findWalkableSpots(level, 15, 60, 60, 76);
+        // FASE 2 - Nivel 3 (X=[15..60], Z=[61..75]): 20 Zombies (8 armadura hierro, 3 armadura diamante), 12 Esqueletos (6 arco encantado)
+        List<BlockPos> spotsF2N3 = findWalkableSpots(level, 15, 60, 61, 75);
         Collections.shuffle(spotsF2N3, new java.util.Random(203));
         idx = 0;
         for (int i = 0; i < 3 && idx < spotsF2N3.size(); i++) {
@@ -686,10 +688,26 @@ public class WellPortalManager {
         LogUtils.getLogger().info("Mobs de la dungeon generados exitosamente en Fase 1 y Fase 2.");
     }
 
+    public static void cleanupTrappedMazeMobs(ServerLevel level) {
+        for (net.minecraft.world.entity.Entity e : level.getAllEntities()) {
+            if (e instanceof LivingEntity living && living.isAlive() && !living.isRemoved() && living.getTags().contains("dungeon_room_f2_n1")) {
+                int relX = living.getBlockX() - DUNGEON_ORIGIN.getX();
+                int relZ = living.getBlockZ() - DUNGEON_ORIGIN.getZ();
+                if (relX >= 71 && relX <= 126 && relZ >= 24 && relZ <= 70) {
+                    living.teleportTo(DUNGEON_ORIGIN.getX() + 55.5, DUNGEON_ORIGIN.getY() + 28, DUNGEON_ORIGIN.getZ() + 35.5);
+                }
+            }
+        }
+    }
+
     private static List<BlockPos> findWalkableSpots(ServerLevel level, int minX, int maxX, int minZ, int maxZ) {
         List<BlockPos> spots = new java.util.ArrayList<>();
         for (int x = minX; x <= maxX; x++) {
             for (int z = minZ; z <= maxZ; z++) {
+                // Hard guard: NUNCA spawnear mobs dentro del laberinto central
+                if (x >= 71 && x <= 126 && z >= 24 && z <= 70) {
+                    continue;
+                }
                 BlockPos pos = DUNGEON_ORIGIN.offset(x, 28, z);
                 level.getChunkSource().getChunk(pos.getX() >> 4, pos.getZ() >> 4, ChunkStatus.FULL, true);
                 BlockState floor = level.getBlockState(pos.below());
@@ -764,10 +782,10 @@ public class WellPortalManager {
                 }
             }
             case GATE_F2_N1 -> {
-                // Muro divisorio entre N1 y N2 en X=55
+                // Muro divisorio entre N1 y N2 en X=41
                 for (int z = 15; z <= 55; z++) {
                     for (int y = 28; y <= 31; y++) {
-                        positions.add(DUNGEON_ORIGIN.offset(55, y, z));
+                        positions.add(DUNGEON_ORIGIN.offset(41, y, z));
                     }
                 }
             }
@@ -863,6 +881,18 @@ public class WellPortalManager {
             "dungeon_room_f2_n3"
     };
 
+    public static boolean isRoomActive(DungeonProtectionData data, String tag) {
+        return switch (tag) {
+            case "dungeon_room_f1_n1" -> !data.isGateCleared(GATE_F1_N1);
+            case "dungeon_room_f1_n2" -> data.isGateCleared(GATE_F1_N1) && !data.isGateCleared(GATE_F1_N2);
+            case "dungeon_room_f1_n3" -> data.isGateCleared(GATE_F1_N2) && !data.isGateCleared(GATE_F1_N3);
+            case "dungeon_room_f2_n1" -> data.isGateCleared(GATE_F1_N3) && !data.isGateCleared(GATE_F2_N1);
+            case "dungeon_room_f2_n2" -> data.isGateCleared(GATE_F2_N1) && !data.isGateCleared(GATE_F2_N2);
+            case "dungeon_room_f2_n3" -> data.isGateCleared(GATE_F2_N2) && !data.isGateCleared(GATE_F2_N3);
+            default -> false;
+        };
+    }
+
     public static void checkDungeonRoomClear(ServerLevel level, net.minecraft.world.entity.LivingEntity dyingEntity) {
         for (String tag : dyingEntity.getTags()) {
             if (!tag.startsWith("dungeon_room_")) continue;
@@ -887,11 +917,14 @@ public class WellPortalManager {
             } else {
                 int finalRemaining = remaining;
                 for (ServerPlayer player : level.players()) {
-                    if (player.distanceToSqr(dyingEntity) < 40 * 40) {
+                    if (player.distanceToSqr(dyingEntity) < 120 * 120) {
                         player.displayClientMessage(
-                                Component.literal("§e[Mazmorra] §7Enemigos restantes en la sala: §f" + finalRemaining + (finalRemaining <= 3 ? " §6(¡Luminiscencia activa!)" : "")),
+                                Component.literal("§e[Mazmorra] §7Enemigos restantes: §e" + finalRemaining + (finalRemaining <= 3 ? " §6(¡Luminiscencia activa!)" : "")),
                                 true
                         );
+                        if (finalRemaining <= 3) {
+                            level.playSound(null, player.blockPosition(), SoundEvents.BELL_RESONATE, SoundSource.PLAYERS, 0.7F, 1.2F);
+                        }
                     }
                 }
 
@@ -899,7 +932,7 @@ public class WellPortalManager {
                 if (remaining <= 3) {
                     for (LivingEntity mob : aliveInRoom) {
                         mob.setGlowingTag(true);
-                        mob.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200, 0, false, false, true));
+                        mob.addEffect(new MobEffectInstance(MobEffects.GLOWING, 300, 0, false, true, true));
                     }
                 }
             }
@@ -911,11 +944,7 @@ public class WellPortalManager {
 
         // 1. Revisar cada una de las 6 salas/niveles de la dungeon
         for (String tag : DUNGEON_ROOM_TAGS) {
-            String gateId = getGateIdForRoomTag(tag);
-            // Si la puerta de esta sala ya fue abierta y superada, no hace falta procesarla
-            if (gateId != null && data.isGateCleared(gateId)) {
-                continue;
-            }
+            boolean active = isRoomActive(data, tag);
 
             List<LivingEntity> aliveInRoom = new java.util.ArrayList<>();
             for (net.minecraft.world.entity.Entity e : level.getAllEntities()) {
@@ -925,14 +954,14 @@ public class WellPortalManager {
             }
 
             int count = aliveInRoom.size();
-            if (count > 0 && count <= 3) {
-                // Cuando SOLO QUEDAN 3 (o menos) en esta fase, aplicar Luminiscencia
+            if (active && count > 0 && count <= 3) {
+                // Cuando SOLO QUEDAN 3 (o menos) en la fase/sala activa, aplicar Luminiscencia
                 for (LivingEntity mob : aliveInRoom) {
                     mob.setGlowingTag(true);
-                    mob.addEffect(new MobEffectInstance(MobEffects.GLOWING, 100, 0, false, false, true));
+                    mob.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200, 0, false, true, true));
                 }
-            } else if (count > 3) {
-                // Si aún quedan más de 3, asegurar que no tengan el resplandor
+            } else {
+                // Si aún quedan más de 3, o si la fase/sala no es la activa, asegurar que no tengan el resplandor
                 for (LivingEntity mob : aliveInRoom) {
                     if (mob.hasEffect(MobEffects.GLOWING)) {
                         mob.removeEffect(MobEffects.GLOWING);
@@ -957,7 +986,7 @@ public class WellPortalManager {
         if (camejitosCount > 0 && camejitosCount <= 3) {
             for (Rabbit camejito : camejitos) {
                 camejito.setGlowingTag(true);
-                camejito.addEffect(new MobEffectInstance(MobEffects.GLOWING, 100, 0, false, false, true));
+                camejito.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200, 0, false, true, true));
             }
         } else if (camejitosCount > 3) {
             for (Rabbit camejito : camejitos) {

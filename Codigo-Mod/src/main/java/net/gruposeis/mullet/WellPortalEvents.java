@@ -61,7 +61,7 @@ public class WellPortalEvents {
 
             // En cada fase/sala de la dimensión Tierras Profundas, cuando queden solo tres mobs (o menos), dejarlos con Luminiscencia
             if (serverLevel.dimension() == WellPortalManager.TIERRAS_PROFUNDAS && serverLevel.getGameTime() % 20L == 0L) {
-                applyLuminiscenceToRemainingMobs(serverLevel);
+                WellPortalManager.updateAllPhasesLuminiscence(serverLevel);
             }
         }
     }
@@ -74,28 +74,8 @@ public class WellPortalEvents {
 
         WellPortalManager.checkDungeonRoomClear(serverLevel, event.getEntity());
 
-        // Al morir un mob en Tierras Profundas, comprobar si ahora quedan 3 o menos mobs para aplicar Luminiscencia
-        if (event.getEntity() instanceof Monster) {
-            applyLuminiscenceToRemainingMobs(serverLevel);
-        }
-    }
-
-    private static void applyLuminiscenceToRemainingMobs(ServerLevel serverLevel) {
-        for (ServerPlayer player : serverLevel.players()) {
-            AABB searchBox = player.getBoundingBox().inflate(35.0D);
-            List<net.minecraft.world.entity.LivingEntity> hostiles = serverLevel.getEntitiesOfClass(
-                    net.minecraft.world.entity.LivingEntity.class,
-                    searchBox,
-                    entity -> entity.isAlive() && (entity instanceof Monster || (entity instanceof net.minecraft.world.entity.animal.Rabbit r && r.getVariant() == net.minecraft.world.entity.animal.Rabbit.Variant.EVIL))
-            );
-
-            // Cuando queden solo tres mobs (o menos de 3), dejarlos con Luminiscencia (Glowing)
-            if (hostiles.size() > 0 && hostiles.size() <= 3) {
-                for (net.minecraft.world.entity.LivingEntity mob : hostiles) {
-                    mob.addEffect(new MobEffectInstance(MobEffects.GLOWING, 60, 0, false, false, true));
-                }
-            }
-        }
+        // Al morir un mob en Tierras Profundas, actualizar de inmediato la luminiscencia para las fases donde queden 3 o menos
+        WellPortalManager.updateAllPhasesLuminiscence(serverLevel);
     }
 
     @SubscribeEvent

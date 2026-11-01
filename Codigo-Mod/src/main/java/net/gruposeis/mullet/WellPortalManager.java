@@ -19,6 +19,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.monster.Zombie;
@@ -852,6 +854,15 @@ public class WellPortalManager {
         };
     }
 
+    public static final String[] DUNGEON_ROOM_TAGS = {
+            "dungeon_room_f1_n1",
+            "dungeon_room_f1_n2",
+            "dungeon_room_f1_n3",
+            "dungeon_room_f2_n1",
+            "dungeon_room_f2_n2",
+            "dungeon_room_f2_n3"
+    };
+
     public static void checkDungeonRoomClear(ServerLevel level, net.minecraft.world.entity.LivingEntity dyingEntity) {
         for (String tag : dyingEntity.getTags()) {
             if (!tag.startsWith("dungeon_room_")) continue;
@@ -863,9 +874,11 @@ public class WellPortalManager {
             if (data.isGateCleared(gateId)) continue;
 
             int remaining = 0;
+            List<LivingEntity> aliveInRoom = new java.util.ArrayList<>();
             for (net.minecraft.world.entity.Entity e : level.getAllEntities()) {
-                if (e != dyingEntity && e.isAlive() && !e.isRemoved() && e.getTags().contains(tag)) {
+                if (e != dyingEntity && e.isAlive() && !e.isRemoved() && e.getTags().contains(tag) && e instanceof LivingEntity living && !living.isDeadOrDying() && living.getHealth() > 0.0F) {
                     remaining++;
+                    aliveInRoom.add(living);
                 }
             }
 
@@ -876,11 +889,82 @@ public class WellPortalManager {
                 for (ServerPlayer player : level.players()) {
                     if (player.distanceToSqr(dyingEntity) < 40 * 40) {
                         player.displayClientMessage(
-                                Component.literal("§e[Mazmorra] §7Enemigos restantes en la sala: §f" + finalRemaining),
+                                Component.literal("§e[Mazmorra] §7Enemigos restantes en la sala: §f" + finalRemaining + (finalRemaining <= 3 ? " §6(¡Luminiscencia activa!)" : "")),
                                 true
                         );
                     }
                 }
+
+                // Cuando solo quedan 3 mobs (o menos), dejarlos con Luminiscencia (Glowing) inmediatamente
+                if (remaining <= 3) {
+                    for (LivingEntity mob : aliveInRoom) {
+                        mob.setGlowingTag(true);
+                        mob.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200, 0, false, false, true));
+                    }
+                }
+            }
+        }
+    }
+
+    public static void updateAllPhasesLuminiscence(ServerLevel level) {
+        DungeonProtectionData data = DungeonProtectionData.get(level);
+
+        // 1. Revisar cada una de las 6 salas/niveles de la dungeon
+        for (String tag : DUNGEON_ROOM_TAGS) {
+            String gateId = getGateIdForRoomTag(tag);
+            // Si la puerta de esta sala ya fue abierta y superada, no hace falta procesarla
+            if (gateId != null && data.isGateCleared(gateId)) {
+                continue;
+            }
+
+            List<LivingEntity> aliveInRoom = new java.util.ArrayList<>();
+            for (net.minecraft.world.entity.Entity e : level.getAllEntities()) {
+                if (e instanceof LivingEntity living && living.isAlive() && !living.isRemoved() && !living.isDeadOrDying() && living.getHealth() > 0.0F && living.getTags().contains(tag)) {
+                    aliveInRoom.add(living);
+                }
+            }
+
+            int count = aliveInRoom.size();
+            if (count > 0 && count <= 3) {
+                // Cuando SOLO QUEDAN 3 (o menos) en esta fase, aplicar Luminiscencia
+                for (LivingEntity mob : aliveInRoom) {
+                    mob.setGlowingTag(true);
+                    mob.addEffect(new MobEffectInstance(MobEffects.GLOWING, 100, 0, false, false, true));
+                }
+            } else if (count > 3) {
+                // Si aún quedan más de 3, asegurar que no tengan el resplandor
+                for (LivingEntity mob : aliveInRoom) {
+                    if (mob.hasEffect(MobEffects.GLOWING)) {
+                        mob.removeEffect(MobEffects.GLOWING);
+                    }
+                    mob.setGlowingTag(false);
+                }
+            }
+        }
+
+        // 2. Revisar la fase de minion camejitos del jefe (Mr. Mullet)
+        List<Rabbit> camejitos = new java.util.ArrayList<>();
+        for (net.minecraft.world.entity.Entity e : level.getAllEntities()) {
+            if (e instanceof Rabbit rabbit && rabbit.isAlive() && !rabbit.isRemoved() && !rabbit.isDeadOrDying() && rabbit.getHealth() > 0.0F) {
+                if (rabbit.getTags().contains("dungeon_camejitos") ||
+                        (rabbit.getVariant() == Rabbit.Variant.EVIL && "camejitos".equals(rabbit.getCustomName() != null ? rabbit.getCustomName().getString() : ""))) {
+                    camejitos.add(rabbit);
+                }
+            }
+        }
+
+        int camejitosCount = camejitos.size();
+        if (camejitosCount > 0 && camejitosCount <= 3) {
+            for (Rabbit camejito : camejitos) {
+                camejito.setGlowingTag(true);
+                camejito.addEffect(new MobEffectInstance(MobEffects.GLOWING, 100, 0, false, false, true));
+            }
+        } else if (camejitosCount > 3) {
+            for (Rabbit camejito : camejitos) {
+                if (camejito.hasEffect(MobEffects.GLOWING)) {
+                    camejito.removeEffect(MobEffects.GLOWING);
+                }
+                camejito.setGlowingTag(false);
             }
         }
     }

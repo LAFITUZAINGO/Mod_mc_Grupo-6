@@ -225,19 +225,29 @@ public class MrMulletEntity extends PathfinderMob {
 
         // En la fase de camejitos: cuando queden solo tres mobs (o menos), dejarlos con efecto Luminiscencia
         if (this.hasSpawnedMinions) {
-            this.activeCamejitos.removeIf(r -> !r.isAlive() || r.isRemoved());
+            this.activeCamejitos.removeIf(r -> !r.isAlive() || r.isRemoved() || r.isDeadOrDying() || r.getHealth() <= 0.0F);
 
             // Recuperar referencias si se recargó el mundo
             if (this.activeCamejitos.isEmpty() && this.level().getGameTime() % 40L == 0L) {
-                net.minecraft.world.phys.AABB arena = this.getBoundingBox().inflate(35.0D);
+                net.minecraft.world.phys.AABB arena = this.getBoundingBox().inflate(45.0D);
                 java.util.List<Rabbit> nearby = this.level().getEntitiesOfClass(Rabbit.class, arena,
-                        r -> r.isAlive() && r.getVariant() == Rabbit.Variant.EVIL && "camejitos".equals(r.getCustomName() != null ? r.getCustomName().getString() : ""));
+                        r -> r.isAlive() && !r.isDeadOrDying() && r.getHealth() > 0.0F &&
+                                (r.getTags().contains("dungeon_camejitos") ||
+                                        (r.getVariant() == Rabbit.Variant.EVIL && "camejitos".equals(r.getCustomName() != null ? r.getCustomName().getString() : ""))));
                 this.activeCamejitos.addAll(nearby);
             }
 
             if (this.activeCamejitos.size() > 0 && this.activeCamejitos.size() <= 3) {
                 for (Rabbit camejito : this.activeCamejitos) {
-                    camejito.addEffect(new MobEffectInstance(MobEffects.GLOWING, 60, 0, false, false, true));
+                    camejito.setGlowingTag(true);
+                    camejito.addEffect(new MobEffectInstance(MobEffects.GLOWING, 100, 0, false, false, true));
+                }
+            } else if (this.activeCamejitos.size() > 3) {
+                for (Rabbit camejito : this.activeCamejitos) {
+                    if (camejito.hasEffect(MobEffects.GLOWING)) {
+                        camejito.removeEffect(MobEffects.GLOWING);
+                    }
+                    camejito.setGlowingTag(false);
                 }
             }
         }
@@ -286,6 +296,8 @@ public class MrMulletEntity extends PathfinderMob {
                 camejito.setCustomName(Component.literal("camejitos"));
                 camejito.setCustomNameVisible(true);
                 camejito.setPersistenceRequired();
+                camejito.addTag("dungeon_camejitos");
+                camejito.addTag("dungeon_mob");
 
                 if (this.getTarget() != null) {
                     camejito.setTarget(this.getTarget());

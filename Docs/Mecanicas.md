@@ -74,7 +74,7 @@ El objetivo de esta ambientación es transmitir una sensación de aislamiento, m
 
 ### Distribución del Calabozo
 
-  **En proceso**
+  [Dungeon.md]
 
 ## 5. Sistema de Tarjetas
 

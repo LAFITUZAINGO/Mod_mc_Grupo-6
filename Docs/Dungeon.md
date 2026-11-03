@@ -4,6 +4,8 @@
 
 La dungeon se encuentra dentro de la dimensión **Tierras Profundas** y está formada por diferentes salas y niveles de dificultad.
 
+El jugador debe superar los enemigos de cada sala para poder continuar. El sistema utiliza barreras invisibles que impiden avanzar hasta completar los desafíos correspondientes.
+
 El jugador debe avanzar por las distintas salas, derrotar a los enemigos y conseguir las **dos tarjetas amarillas** necesarias para fabricar la **tarjeta roja**.
 
 La tarjeta roja permite acceder a la zona donde se encuentra **MR Mullet**.
@@ -53,6 +55,16 @@ La distribución exacta de las habitaciones se encuentra representada en el diag
 > **Pendiente de agregar imagen del diseño definitivo de la dungeon.**
 
 ---
+
+### Funcionamiento de las salas
+
+Cada sala cuenta con un sistema de seguimiento de enemigos restantes.
+
+Mientras existan enemigos en la sala, el jugador no puede avanzar a través de la barrera correspondiente.
+
+Cuando todos los enemigos son derrotados, se toma la sala como completada, y permite continuar el recorrido.
+
+Las barreras se utilizan para mantener el orden de avance y evitar que el jugador avance directamente hacia las siguientes zonas.
 
 # 3. Fase 1
 
@@ -117,6 +129,8 @@ Al completar la Fase 2 se obtiene la segunda **tarjeta amarilla**.
 
 # 5. Tarjetas
 
+Las tarjetas son necesarias para avanzar dentro de la dungeon.
+
 ## Tarjeta amarilla
 
 Existen dos tarjetas amarillas dentro de la dungeon.
@@ -135,7 +149,7 @@ Las dos tarjetas amarillas se utilizan para fabricar la **tarjeta roja**.
 
 ## Tarjeta roja
 
-La tarjeta roja se fabrica utilizando las dos tarjetas amarillas.
+La tarjeta roja se fabrica utilizando las dos tarjetas amarillas y colocandolas sin orden especifico en la mesa de crafteo.
 
 ```text
 Tarjeta amarilla
@@ -155,14 +169,13 @@ Después de conseguir la tarjeta roja, el jugador puede acceder a la zona donde 
 
 MR Mullet es el jefe principal de la dungeon.
 
-Su sala se encuentra después de las fases de enemigos y cuenta con una entrada y una salida.
+Su sala circular se encuentra después de las fases de enemigos y cuenta con una entrada y una salida.
 
 ### Características del jefe
 
 - Alta resistencia.
-- Ataques a distancia.
-- Habilidades sobrenaturales.
-- Efectos relacionados con el malware.
+- Ataques a distancia y cuerpo a cuerpo.
+- Proyectiles especiales.
 - Diferentes fases de combate.
 
 Los ataques y estadísticas exactas del jefe se definirán en la documentación correspondiente al jefe.
@@ -267,18 +280,9 @@ Salida
 
 ---
 
-# 10. Recompensas
+# 10. Finalizacion
 
-Después de derrotar a MR Mullet, el jugador recibirá las recompensas correspondientes a la finalización de la dungeon.
-
-Las recompensas pueden incluir:
-
-- Objetos especiales.
-- Loot.
-- Recompensas relacionadas con la historia.
-- Acceso al portal de regreso.
-
-Las recompensas exactas todavía están **pendientes de definir**.
+Después de derrotar a MR Mullet, el jugador sera teletransportado fuera de la dungeon y junto al pozo inicial.
 
 ---
 
@@ -286,7 +290,7 @@ Las recompensas exactas todavía están **pendientes de definir**.
 
 | Elemento | Estado |
 |---|---|
-| Diseño general de la dungeon | En diseño |
+| Diseño general de la dungeon | Pendiente |
 | Entrada | Pendiente |
 | Fase 1 | Pendiente |
 | Fase 2 | Pendiente |

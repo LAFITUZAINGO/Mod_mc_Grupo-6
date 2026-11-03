@@ -2,133 +2,114 @@
 
 ## 1. Introducción
 
-**Mod_mc_Grupo-6** es un mod de Minecraft Forge 1.20.1 centrado en la exploración, la aventura y la progresión narrativa.
+**Mod_mc_Grupo-6** es un mod de aventura, exploración y combate desarrollado para **Minecraft Forge 1.20.1**.
 
-El objetivo principal del jugador es encontrar y rescatar al profesor **MR_MULLET**, quien quedó atrapado en una dimensión desconocida y fue corrompido por un malware creado por su alumno Pintaluba.
+El argumento central sigue el rescate del **Profesor Mullet**, un eminente académico que fue víctima de un malware corruptor programado por su estudiante **Pintaluba**. Como consecuencia, el profesor fue arrastrado a la dimensión de las **Tierras Profundas**, transformándose en una entidad hostil y colosal conocida como **Mr. Mullet**.
 
-Para completar su misión, el jugador deberá encontrar una estructura especial, acceder a una dimensión, superar diferentes desafíos, conseguir objetos necesarios para avanzar y enfrentarse al jefe final.
+El deber del jugador es equiparse, descifrar las pistas, localizar la entrada mística, superar los peligros de la mazmorra subterránea, derrotar a Mr. Mullet y restaurar la paz rescatando al profesor.
 
-## 2. Inicio e Historia
+---
 
-### Libro de la Verdad
+## 2. Inicio de la Aventura: El Libro "Mr Mullet"
 
-Al iniciar el mundo, el jugador recibe automáticamente en su inventario un libro llamado **Libro de la Verdad**.
+Al ingresar por primera vez al mundo, cada jugador recibe automáticamente en su inventario el libro oficial de la aventura.
 
-Este libro cumple las siguientes funciones:
+### 2.1. Propiedades del Libro
+- **Título en juego:** `Mr Mullet` (registrado en `LibroInicio.java`).
+- **Autor:** `Mr Mullet`.
+- **Tipo de ítem:** Libro escrito (`minecraft:written_book`).
+- **Control de entrega única:** El mod guarda una etiqueta persistente en el jugador (`mullet_libro_recibido: true`) para garantizar que se entregue una sola vez.
+- **Recuperación:** Si el jugador extravía su libro, cualquier operador puede devolvérselo con el comando [`/mullet libro`](Comandos.md#1-recuperar-el-libro-mullet-libro).
 
-- Introducir la historia principal del mod.
-- Explicar la misión de rescatar a MR_MULLET.
-- Proporcionar pistas sobre la ubicación del Pozo.
-- Orientar al jugador sobre cómo comenzar su aventura.
+### 2.2. Contenido de las Páginas
+1. **Página 1:** Bienvenida a la aventura e introducción a la misión de rescate.
+2. **Página 2:** Contexto sobre el malware de Pintaluba e instrucciones para buscar la estructura de **El Pozo** en el Overworld.
+3. **Página 3:** Pistas para fabricar la **Llave Moneda** y utilizarla para abrir el portal en las aguas del pozo.
+4. **Página 4:** Advertencia sobre los desafíos de las **Tierras Profundas**, la necesidad de superar las salas de combate y fabricar la **Tarjeta Roja**.
+5. **Página 5:** El objetivo final: purificar y liberar a Mr. Mullet de la corrupción.
 
-Si el jugador pierde el libro, puede recuperarlo mediante un comando administrativo.
+---
 
-## 3. Acceso a la Dimensión
+## 3. Acceso a las Tierras Profundas
 
-### Llave Moneda
+Para ingresar a la dimensión de la mazmorra, el jugador debe completar una secuencia de dos pasos en el Overworld:
 
-La **Llave Moneda** es el objeto utilizado para activar el portal del pozo.
+### 3.1. Crafteo de la Llave Moneda (`mullet:moneda`)
+Se elabora combinando **1 Esmeralda** en el centro y **4 Lingotes de Oro** formando una cruz en la mesa de crafteo:
 
-**Receta de crafteo:**
+```text
+       [ Oro ]
+[ Oro ][ Esmeralda ][ Oro ]
+       [ Oro ]
+```
 
-- 1 Esmeralda.
-- 4 Lingotes de Oro.
+### 3.2. Activación del Pozo
+1. El jugador explora el mundo hasta encontrar la estructura natural de **El Pozo**.
+2. Arroja la **Llave Moneda** al agua del foso central.
+3. La moneda es consumida y el agua se transmuta en bloques de portal estelar, abriendo la puerta a las Tierras Profundas.
 
-La Esmeralda debe colocarse en el centro de la mesa de crafteo, mientras que los cuatro lingotes de oro deben ubicarse a su alrededor, formando una cruz.
+> *Para conocer todos los detalles sobre la generación del pozo, probabilidades y lógica técnica de teletransportación, consulta [Pozo_y_Dimension.md](Pozo_y_Dimension.md).*
 
-Una vez fabricada, debe arrojarse al agua de El pozo para asi activar el portal.
+---
 
-**Distribución:**
+## 4. Exploración de la Mazmorra Subterránea
 
-| | | |
-|:---:|:---:|:---:|
-| | Oro | |
-| Oro | Esmeralda | Oro |
-| | Oro | |
+Una vez dentro de las Tierras Profundas, el jugador aparece en la sala inicial de la mazmorra (Sala de la Cruz de Amatista).
 
-### Estructura del Pozo
+### 4.1. Reglas del Entorno (Modo Aventura / Anti-Grief)
+La mazmorra cuenta con un sistema de protección integral:
+- **No se pueden romper bloques originales** de la dungeon en supervivencia (únicamente bloques colocados por el propio jugador).
+- Las explosiones y los pistones no dañan la estructura original.
+- Para avanzar entre salas es obligatorio eliminar a todos los monstruos de cada nivel para que desaparezcan las **barreras mágicas invisibles**.
+- Cuando en una sala activa quedan **3 o menos enemigos vivos**, estos emiten un resplandor visible a través de las paredes (**Luminiscencia / `GLOWING`**).
 
-El jugador deberá explorar el mundo hasta encontrar una estructura especial llamada **El Pozo**.
+> *Para consultar el mapa detallado, distribución de salas, barreras y tabla de botín de los barriles, consulta [Dungeon.md](Dungeon.md).*
 
-Características:
+---
 
-- Su tasa de aparición será equivalente a la de la estructura que contiene el portal del End.
-- Se establecerá una condición para evitar que ambas estructuras aparezcan juntas.
-- Funcionará como entrada principal a la dimensión del calabozo.
+## 5. El Sistema de Progresión por Tarjetas
 
-### Activación del Portal
+El avance hacia el combate definitivo está regulado por un sistema de tarjetas de seguridad:
 
-Para activar el portal, el jugador debe arrojar la Llave Moneda al agua de El Pozo.
+```text
+[ Superar Fase 1 ] ──> Cofre 1 ──> Tarjeta Amarilla (1ª) ┐
+                                                         ├──> [ Crafteo ] ──> Tarjeta Roja ──> Desbloquea Sala del Jefe
+[ Superar Fase 2 ] ──> Cofre 2 ──> Tarjeta Amarilla (2ª) ┘
+```
 
-Cuando se reconoce que la moneda fue arrojada en la estructura correcta, el objeto desaparece y el agua se transforma en bloques de portal.
+1. **Tarjeta Amarilla:** Existen 2 en la mazmorra:
+   - Una en el Cofre 1 al superar la Fase 1.
+   - Otra en el Cofre 2 al superar la Fase 2.
+2. **Tarjeta Roja:** Se craftea en mesa sin orden (receta sin forma) combinando las **2 Tarjetas Amarillas**. Permite desbloquear la puerta principal de lana roja que conduce a la arena de combate.
 
-Al ingresar, el jugador es transportado a la zona inicial de la dungeon.
+---
 
-## 4. Dimensión Tierras Profundas
+## 6. La Batalla Final: Mr. Mullet
 
-La dimensión **Tierras_profundas** estará formada por una estructura subterránea de aspecto rústico, lúgubre y claustrofóbico.
+Tras franquear la puerta de lana roja y atravesar el pasillo decorativo, el jugador accede a la **Arena Circular**, donde aguarda **Mr. Mullet**.
 
-Su construcción utilizará principalmente bloques vanilla de Minecraft, con predominancia de tonalidades grises y distribuciones arquitectónicas irregulares.
+- Es una entidad de **5 metros de altura** con 300 puntos de vida (150 corazones).
+- Cuenta con ataques cuerpo a cuerpo devastadores, ráfagas de proyectiles de cartas mágicas (tarjetas amarillas ralentizantes y rojas explosivas con fuego y Wither), estado de **Frenesí** periódico (con velocidad quintuplicada) y la invocación de una horda de **Camejitos** al 50% de su vida.
 
-El objetivo de esta ambientación es transmitir una sensación de aislamiento, misterio y peligro durante la exploración.
+> *Para el desglose completo de estadísticas, ataques, proyectiles y fases del combate, consulta [Entidades_y_Combate.md](Entidades_y_Combate.md).*
 
-### Distribución del Calabozo
+---
 
-- [Mecánicas y progresión del mod](Docs/Mecanicas.md)
+## 7. Victoria y Rescate del Profesor
 
-## 5. Sistema de Tarjetas
+Al derrotar a Mr. Mullet:
+1. El jefe es purificado y la puerta roja de salida de la arena se desbloquea.
+2. El jugador accede a la **Sala Negra de Victoria**, donde se encuentra el **Bloque de Retorno** (`mullet_block`).
+3. Al interactuar con el bloque:
+   - El jugador es teletransportado de vuelta al Overworld junto al pozo original.
+   - Frente a él aparece el **Profesor Mullet** en su forma humana pacífica, agradeciendo al jugador mediante diálogos interactivos y celebrando el rescate.
 
-El sistema de tarjetas es una mecánica de progresión que controla el acceso a determinadas áreas del calabozo.
+---
 
-### Tarjeta Amarilla
+## 8. Documentos del Proyecto
 
-Las Tarjetas Amarillas son objetos necesarios para avanzar dentro de la dungeon.
-
-Se encuentran en los dos cofres principales de recompensa:
-
-- El primer cofre contiene una Tarjeta Amarilla.
-- El segundo cofre contiene otra Tarjeta Amarilla.
-
-Se necesitan las dos tarjetas para fabricar la Tarjeta Roja.
-
-### Tarjeta Roja
-
-La **Tarjeta Roja** permite desbloquear la entrada a la sala del jefe final.
-
-**Receta de crafteo:**
-
-- 2 Tarjetas Amarillas.
-
-Ambas tarjetas deberán combinarse en una mesa de crafteo sin importar su orden.
-
-Una vez fabricada, el jugador podrá utilizarla para desbloquear la puerta principal de la sala de MR_MULLET.
-
-## 6. Batalla Final: MR_MULLET
-
-### Descripción
-
-**MR_MULLET** es el jefe final del mod y representa el último desafío de la aventura y se encuentra en la sala circular dentro de la dungeon.
-
-Debido a la corrupción provocada por el malware de Pintaluba, el profesor ha adquirido habilidades sobrenaturales y un comportamiento hostil.
-
-### Ubicación
-
-Se encontrará en la sala principal del calabozo, cuyo acceso requiere la Tarjeta Roja.
-
-### Habilidades y Características
-
-Mr. Mullet es el jefe principal de la aventura. Se encuentra en una sala circular dentro de la dungeon.
-
-Es una entidad hostil que persigue y ataca a los jugadores. Cuenta con ataques cuerpo a cuerpo y proyectiles con forma de tarjetas.
-Durante el combate puede activar un modo especial llamado Frenesí, que aumenta temporalmente su velocidad de movimiento y modifica la frecuencia de sus ataques.
-Cuando su vida llega al 50 %, invoca cinco conejos hostiles llamados camejitos.
-El jefe cuenta con una barra de vida propia y no desaparece por alejarse del jugador.
-
-Las estadísticas, los ataques y los efectos de sus proyectiles se encuentran detallados en el documento Jefe.md.
-
-
-El enfrentamiento representará el desafío más importante de la dimensión.
-
-## 7. Recompensas y Finalización
-
-Al derrotar a MR_MULLET, el jugador habrá completado el objetivo principal de la aventura.
+- [Dungeon.md](Dungeon.md): Estructura de la mazmorra, coordenadas, barreras, mecánicas anti-grief y tabla de loot.
+- [Entidades_y_Combate.md](Entidades_y_Combate.md): Comportamiento de Mr. Mullet, proyectiles de cartas y el Profesor Mullet.
+- [Pozo_y_Dimension.md](Pozo_y_Dimension.md): Generación del pozo, activación del portal y propiedades de la dimensión.
+- [Comandos.md](Comandos.md): Lista completa de comandos administrativos para gestión y pruebas.
+- [Stack.md](Stack.md): Tecnologías, herramientas, librerías y versiones del entorno de desarrollo.

@@ -74,7 +74,7 @@ El objetivo de esta ambientación es transmitir una sensación de aislamiento, m
 
 ### Distribución del Calabozo
 
-  [Dungeon.md]
+- [Mecánicas y progresión del mod](Docs/Mecanicas.md)
 
 ## 5. Sistema de Tarjetas
 
@@ -86,8 +86,8 @@ Las Tarjetas Amarillas son objetos necesarios para avanzar dentro de la dungeon.
 
 Se encuentran en los dos cofres principales de recompensa:
 
-- El primer cofre contiene una Tarjeta Amarilla y se encuentra después de la Fase 1.
-- El segundo cofre contiene otra Tarjeta Amarilla y se encuentra después de la Fase 2.
+- El primer cofre contiene una Tarjeta Amarilla.
+- El segundo cofre contiene otra Tarjeta Amarilla.
 
 Se necesitan las dos tarjetas para fabricar la Tarjeta Roja.
 
@@ -132,36 +132,3 @@ El enfrentamiento representará el desafío más importante de la dimensión.
 ## 7. Recompensas y Finalización
 
 Al derrotar a MR_MULLET, el jugador habrá completado el objetivo principal de la aventura.
-
-### Recompensas
-
-Tras finalizar el combate se activarán los siguientes eventos:
-
-1. **Liberación de MR_MULLET:** se reproducirá un diálogo indicando que el profesor ha sido liberado de la corrupción.
-2. **Cofres de Recompensas:** el jugador obtendrá acceso a los cofres de la sala final.
-3. **Portal de Regreso:** se habilitará un portal que permitirá regresar al mundo principal.
-
-La activación del portal marcará la finalización de la aventura.
-
-## 8. Resumen de la Progresión
-
-El orden previsto de la aventura será el siguiente:
-
-1. Iniciar un mundo y recibir el Libro de la Verdad.
-2. Leer las instrucciones y pistas del libro.
-3. Reunir los materiales y fabricar la Llave Moneda.
-4. Explorar el mundo hasta encontrar el Pozo.
-5. Arrojar la moneda para desbloquear el acceso.
-6. Ingresar a la dimensión Tierras_profundas.
-7. Explorar la zona segura inicial.
-8. Superar la primera sala y obtener una Tarjeta Amarilla.
-9. Superar la segunda sala y obtener otra Tarjeta Amarilla.
-10. Regresar a la zona segura y fabricar la Tarjeta Roja.
-11. Desbloquear la sala del jefe final.
-12. Enfrentarse a MR_MULLET y derrotarlo.
-13. Recibir las recompensas y liberar al profesor.
-14. Utilizar el portal de regreso para volver al mundo principal.
-
----
-
-**Nota:** Este documento describe las mecánicas y funcionalidades previstas para el mod. Algunas características se encuentran en desarrollo y pueden modificarse durante la implementación.

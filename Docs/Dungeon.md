@@ -10,28 +10,6 @@ El jugador debe avanzar por las distintas salas, derrotar a los enemigos y conse
 
 La tarjeta roja permite acceder a la zona donde se encuentra **MR Mullet**.
 
-El recorrido general es:
-
-```text
-Entrada
-   ↓
-Fase 1
-   ↓
-Tarjeta amarilla
-   ↓
-Fase 2
-   ↓
-Tarjeta amarilla
-   ↓
-Tarjeta roja
-   ↓
-Entrada a MR Mullet
-   ↓
-MR Mullet
-   ↓
-Salida
-```
-
 ---
 
 ## 2. Diseño de la dungeon
@@ -39,22 +17,61 @@ Salida
 La dungeon estará formada por:
 
 - Una entrada.
-- Una zona correspondiente a la Fase 1.
-- Una zona correspondiente a la Fase 2.
-- Salas de enemigos.
-- Salas o zonas con cofres.
-- Dos tarjetas amarillas.
-- Una zona de acceso a MR Mullet.
+- Dos salas paralelas de loot.
+- Sala de enemigo.
+- Altar a Cloude Code con una tarjeta amarilla.
+- Un laberinto.
+- Sala de enemigos
+- Altar a Diego Vera con una tarjeta amarilla
+- Por el laberinto se accede a la sala del jefe.
 - Sala del jefe.
 - Una salida.
-
-La distribución exacta de las habitaciones se encuentra representada en el diagrama de diseño de la dungeon.
-
-### Diagrama
-
-> **Pendiente de agregar imagen del diseño definitivo de la dungeon.**
-
 ---
+
+### Diagrama/Mapa:
+```mermaid
+flowchart TD
+    classDef spawn fill:#4a154b,stroke:#a855f7,stroke-width:2px,color:#fff;
+    classDef supply fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff;
+    classDef warped fill:#0d3b43,stroke:#14b8a6,stroke-width:2px,color:#fff;
+    classDef crimson fill:#4a1525,stroke:#ef4444,stroke-width:2px,color:#fff;
+    classDef maze fill:#3b3a30,stroke:#eab308,stroke-width:2px,color:#fff;
+    classDef boss fill:#1f2937,stroke:#dc2626,stroke-width:2px,color:#fff;
+    classDef exit fill:#111827,stroke:#22c55e,stroke-width:2px,color:#fff;
+
+    Start(["Pozo Overworld + Moneda"]):::spawn --> Spawn["Sala de Entrada (Spawn Amatista)<br/><i>X: 261, Y: 29, Z: 35</i>"]:::spawn
+    Spawn --> Barriles["Sala de Barriles (216 Barriles de Suministros)<br/><i>X: [212..237], Z: [4..65]</i>"]:::supply
+    
+    Barriles --> F1N1["Fase 1 - Nivel 1 (Azul / Warped)<br/>8 Zombies, 5 Esqueletos"]:::warped
+    F1N1 -->|Eliminar enemigos| GateF1N1["Barrera GATE_F1_N1 desaparece<br/><i>Muro en X = 160</i>"]
+    GateF1N1 --> F1N2["Fase 1 - Nivel 2<br/>12 Zombies (4 hierro), 7 Esqueletos (3 arco)"]:::warped
+    F1N2 -->|Eliminar enemigos| GateF1N2["Barrera GATE_F1_N2 desaparece<br/><i>Puerta en Z = 60</i>"]
+    GateF1N2 --> F1N3["Fase 1 - Nivel 3<br/>18 Zombies (6 hierro, 2 diamante), 10 Esqueletos"]:::warped
+    F1N3 -->|Eliminar enemigos| GateF1N3["Barrera GATE_F1_N3 desaparece"]
+    GateF1N3 --> Chest1["Cofre 1 en (149, 30, 70)<br/>★ 1ª TARJETA AMARILLA ★"]:::warped
+
+    GateF1N3 --> Laberinto["Laberinto Central (Deepslate)<br/><i>X: [71..130], Z: [15..58]</i><br/>(Barrera en X = 71 desbloqueada)"]:::maze
+    Laberinto --> F2N1["Fase 2 - Nivel 1 (Rojo / Crimson)<br/>12 Zombies (4 hierro), 8 Esqueletos"]:::crimson
+    F2N1 -->|Eliminar enemigos| GateF2N1["Barrera GATE_F2_N1 desaparece<br/><i>Muro en X = 41</i>"]
+    GateF2N1 --> F2N2["Fase 2 - Nivel 2<br/>16 Zombies (6 hierro), 10 Esqueletos (5 empuje)"]:::crimson
+    F2N2 -->|Eliminar enemigos| GateF2N2["Barrera GATE_F2_N2 desaparece<br/><i>Puerta en Z = 60</i>"]
+    GateF2N2 --> F2N3["Fase 2 - Nivel 3<br/>20 Zombies (8 hierro, 3 diamante), 12 Esqueletos"]:::crimson
+    F2N3 -->|Eliminar enemigos| GateF2N3["Barrera GATE_F2_N3 desaparece"]
+    GateF2N3 --> Chest2["Cofre 2 en (40, 30, 71)<br/>★ 2ª TARJETA AMARILLA ★"]:::crimson
+
+    Chest1 & Chest2 --> Craft["CRAFTEO: 2 Tarjetas Amarillas ➔ TARJETA ROJA"]
+    Craft --> RedDoor1["Puerta Roja 1 (Lana roja, 36 bloques)<br/><i>X: [100..103], Z: 44</i><br/>(Clic derecho con Tarjeta Roja)"]:::boss
+    Laberinto -.->|Acceso físico norte| RedDoor1
+    
+    RedDoor1 --> RedCorridor["Pasillo Rojo Decorativo<br/><i>X: [98..105], Z: [45..60]</i>"]:::boss
+    RedCorridor --> BossRoom["Arena Circular de Combate (Mr. Mullet)<br/><i>Centro: (102, 28, 106) | Radio ~35m</i>"]:::boss
+    BossRoom -->|Derrotar a Mr. Mullet| RedDoor2["Puerta Roja 2 (Lana roja, 54 bloques)<br/><i>X: [99..104], Z: 151</i><br/>(Se desbloquea al morir el jefe)"]:::boss
+    
+    RedDoor2 --> FinalRoom["Habitación Negra (Sala de Victoria)<br/><i>X: [65..140], Z: [152..190]</i>"]:::exit
+    FinalRoom --> MulletBlock["Bloque de Retorno (Mullet Block)<br/><i>Posición: (101, 28, 180)</i><br/>Clic derecho"]:::exit
+    MulletBlock --> ExitOverworld(["Retorno al Overworld + Rescate del Profesor"]):::exit
+```
+
 
 ### Funcionamiento de las salas
 
@@ -129,7 +146,7 @@ Al completar la Fase 2 se obtiene la segunda **tarjeta amarilla**.
 
 # 5. Tarjetas
 
-Las tarjetas son necesarias para avanzar dentro de la dungeon.
+Las tarjetas son necesarias para avanzar dentro de la dungeon. Se consiguen en los altares repartidos en la dungeon.
 
 ## Tarjeta amarilla
 
@@ -173,10 +190,13 @@ Su sala circular se encuentra después de las fases de enemigos y cuenta con una
 
 ### Características del jefe
 
+- Altura aumentada.
 - Alta resistencia.
 - Ataques a distancia y cuerpo a cuerpo.
 - Proyectiles especiales.
-- Diferentes fases de combate.
+- Estado de Frenesí de manera aleatroria.
+- Aparición de Conejos asesinos ("Camejitos").
+- Cada dos golpes seguidos al jugadores, da el efecto de wither.
 
 Los ataques y estadísticas exactas del jefe se definirán en la documentación correspondiente al jefe.
 
@@ -244,70 +264,13 @@ El loot de suministros y recompensas generales se encuentra distribuido en los *
 
 ---
 
-# 9. Progresión del jugador
-
-El recorrido esperado dentro de la dungeon es:
-
-```text
-Entrada
-   ↓
-Fase 1 - Nivel 1
-   ↓
-Fase 1 - Nivel 2
-   ↓
-Fase 1 - Nivel 3
-   ↓
-Cofre 1 (Tarjeta amarilla)
-   ↓
-Fase 2 - Nivel 1
-   ↓
-Fase 2 - Nivel 2
-   ↓
-Fase 2 - Nivel 3
-   ↓
-Cofre 2 (Tarjeta amarilla)
-   ↓
-Fabricar tarjeta roja
-   ↓
-Acceder a MR Mullet
-   ↓
-Derrotar a MR Mullet
-   ↓
-Recompensas
-   ↓
-Salida
-```
-
----
-
-# 10. Finalizacion
+# 9. Finalizacion
 
 Después de derrotar a MR Mullet, el jugador sera teletransportado fuera de la dungeon y junto al pozo inicial.
 
 ---
 
-# 11. Elementos pendientes de implementación
-
-| Elemento | Estado |
-|---|---|
-| Diseño general de la dungeon | Pendiente |
-| Entrada | Pendiente |
-| Fase 1 | Pendiente |
-| Fase 2 | Pendiente |
-| Sistema de enemigos | Pendiente |
-| Sistema de loot | Implementado |
-| Tarjeta amarilla | Implementado |
-| Tarjeta roja | Implementado |
-| Sala de MR Mullet | Pendiente |
-| MR Mullet | Pendiente |
-| Recompensas | Pendiente |
-| Salida | Pendiente |
-| Generación de la dungeon | Pendiente |
-| Diagrama definitivo | Pendiente |
-
----
-
-# 12. Notas de desarrollo
+# 10. Notas de desarrollo
 
 La dungeon debe generarse dentro de la dimensión **Tierras Profundas**.
 

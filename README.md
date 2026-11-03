@@ -7,9 +7,9 @@
 
 #### Descripción General
 
-**Mod_mc_Grupo-6** es un mod de Minecraft centrado en la exploración, la aventura y una historia narrativa. El jugador deberá viajar a una dimensión extraña para encontrar y rescatar al profesor Mr. Mullet, quien quedó atrapado y corrompido por un extraño malware que se fusionó con el mundo.
+**Mod_mc_Grupo-6** es un mod de Minecraft centrado en la exploración, la aventura y una historia narrativa. El jugador deberá viajar a una dimensión extraña para encontrar y rescatar al profesor Mr. Mullet, quien quedó atrapado y corrompido por un extraño malware.
 
-Durante la aventura, el jugador deberá explorar una estructura subterránea, conseguir objetos especiales y resolver pequeñas mecánicas de crafteo para avanzar. El objetivo final es enfrentarse a Mr. Mullet, derrotarlo y liberarlo de la corrupción que lo mantiene atrapado.
+Durante la aventura, el jugador deberá explorar una estructura subterránea, conseguir objetos especiales y resolver un pequeño laberinto. El objetivo final es enfrentarse a Mr. Mullet, derrotarlo y liberarlo de la corrupción que lo mantiene atrapado.
 
 
 ## Documentación
@@ -27,4 +27,4 @@ Durante la aventura, el jugador deberá explorar una estructura subterránea, co
 - Desbloqueo de la sala del jefe final mediante la Tarjeta Roja.
 - Combate contra Mr. Mullet, con ataques y habilidades especiales.
 - Obtención de recompensas tras derrotar al jefe.
-- Apertura de un portal para finalizar la aventura y regresar a casa.
+- Regresar el overworld.

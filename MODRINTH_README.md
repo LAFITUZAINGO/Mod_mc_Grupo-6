@@ -4,7 +4,7 @@
 
 ---
 
-## 🌟 Características Principales
+## Características Principales
 
 - **Estructura y Portal del Pozo:** Acceso mediante un pozo místico con mecánicas de portal personalizadas activado arrojando la Llave Moneda.
 - **Dimensión Personalizada:** Viaja a las *Tierras Profundas*, un vacío claustrofóbico con una mega-mazmorra subterránea.
@@ -20,7 +20,7 @@
 
 ---
 
-## 📋 Requisitos y Compatibilidad
+## Requisitos y Compatibilidad
 
 - **Cargador de Mods (Loader):** Forge (versión `47.4.28` o superior para 1.20.1)
 - **Versión de Minecraft:** `1.20.1`
@@ -29,9 +29,9 @@
 
 ---
 
-## 🚀 Instalación
+## Instalación
 
 1. Asegúrate de tener instalado Minecraft Forge para la versión 1.20.1.
-2. Descarga el archivo `.jar` de la versión correspondiente (`mullet-1.0.0.jar`).
+2. Descarga el archivo `.jar` de la versión correspondiente (`mullet-0.3-alpha.jar`).
 3. Coloca el archivo `.jar` dentro de la carpeta `.minecraft/mods`.
 4. ¡Inicia el juego y disfruta de la aventura!

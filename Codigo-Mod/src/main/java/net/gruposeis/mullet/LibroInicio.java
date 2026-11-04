@@ -29,17 +29,29 @@ public class LibroInicio {
         }
 
         // Crear el libro
-        ItemStack libro = new ItemStack(Items.WRITTEN_BOOK);
+        ItemStack libro = crearLibro();
 
+        // Entregar el libro
+        jugador.getInventory().add(libro);
+
+        // Marcar que ya lo recibió
+        jugador.getPersistentData().putBoolean(
+                "mullet_libro_recibido",
+                true
+        );
+    }
+
+    /**
+     * Construye y devuelve el libro escrito de bienvenida e historia "Mr Mullet".
+     * Centralizado aquí para evitar duplicación de código en comandos y eventos.
+     */
+    public static ItemStack crearLibro() {
+        ItemStack libro = new ItemStack(Items.WRITTEN_BOOK);
         CompoundTag tag = libro.getOrCreateTag();
 
-        // Nombre del libro
         tag.putString("title", "Mr Mullet");
-
-        // Autor
         tag.putString("author", "Mr Mullet");
 
-        // Páginas
         ListTag paginas = new ListTag();
 
         paginas.add(StringTag.valueOf(
@@ -63,14 +75,6 @@ public class LibroInicio {
         ));
 
         tag.put("pages", paginas);
-
-        // Entregar el libro
-        jugador.getInventory().add(libro);
-
-        // Marcar que ya lo recibió
-        jugador.getPersistentData().putBoolean(
-                "mullet_libro_recibido",
-                true
-        );
+        return libro;
     }
 }
